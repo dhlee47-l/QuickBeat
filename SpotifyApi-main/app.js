@@ -1,4 +1,4 @@
-const APIController = (function() {
+const APIController = (function () {
 
     const _getToken = async () => {
         const result = await fetch('https://accounts.spotify.com/api/token', {
@@ -17,7 +17,7 @@ const APIController = (function() {
     const _getGenres = async (token) => {
         const result = await fetch(`https://api.spotify.com/v1/browse/categories?locale=sv_KR`, {
             method: 'GET',
-            headers: { 'Authorization': 'Bearer ' + token }
+            headers: {'Authorization': 'Bearer ' + token}
         });
 
         const data = await result.json();
@@ -28,7 +28,7 @@ const APIController = (function() {
         const limit = 20;
         const result = await fetch(`https://api.spotify.com/v1/browse/categories/${genreId}/playlists?limit=${limit}`, {
             method: 'GET',
-            headers: { 'Authorization': 'Bearer ' + token }
+            headers: {'Authorization': 'Bearer ' + token}
         });
 
         const data = await result.json();
@@ -39,7 +39,7 @@ const APIController = (function() {
         const limit = 20;
         const result = await fetch(`${tracksEndPoint}?limit=${limit}`, {
             method: 'GET',
-            headers: { 'Authorization': 'Bearer ' + token }
+            headers: {'Authorization': 'Bearer ' + token}
         });
 
         const data = await result.json();
@@ -49,7 +49,7 @@ const APIController = (function() {
     const _getTrack = async (token, trackEndPoint) => {
         const result = await fetch(`${trackEndPoint}`, {
             method: 'GET',
-            headers: { 'Authorization': 'Bearer ' + token }
+            headers: {'Authorization': 'Bearer ' + token}
         });
 
         const data = await result.json();
@@ -75,7 +75,7 @@ const APIController = (function() {
     }
 })();
 
-const UIController = (function() {
+const UIController = (function () {
 
     const DOMElements = {
         selectGenre: '#select_genre',
@@ -107,21 +107,30 @@ const UIController = (function() {
             document.querySelector(DOMElements.selectPlaylist).insertAdjacentHTML('beforeend', html);
         },
 
-        createTrack(id, name) {
-            const html = `<a href="#" class="list-group-item list-group-item-action list-group-item-light" id="${id}">${name}</a>`;
-            document.querySelector(DOMElements.divSonglist).insertAdjacentHTML('beforeend', html);
-        },
+        // createTrack(id, name) {
+        //     const html = `<a href="#" class="list-group-item list-group-item-action list-group-item-light" id="${id}">${name}</a>`;
+        //     document.querySelector(DOMElements.divSonglist).insertAdjacentHTML('beforeend', html);
+        // },
 
-        createTrackDetail(img, title, artist, previewUrl) {
-            const detailDiv = document.querySelector(DOMElements.divSongDetail);
-            detailDiv.innerHTML = '';
-
-            // const html = `
-            //
-            // `;
-
-            detailDiv.insertAdjacentHTML('beforeend', html);
-        },
+        // createTrackDetail(img, title, artist, previewUrl) {
+        //     const detailDiv = document.querySelector(DOMElements.divSongDetail);
+        //     detailDiv.innerHTML = '';
+        //
+        //     // const html = `
+        //     //<div class="row col-sm-12 px-0">
+        //       <img src="${img}" alt="">
+        //     </div>
+        //     <div class="row col-sm-12 px-0">
+        //       <label for="Genre" class="form-label col-sm-12">${title}</label>
+        //     </div>
+        //     <div class="row col-sm-12 px-0">
+        //       <label for="artist" class="form-label col-sm-12">By ${artist}</label>
+        //     </div>
+        //     ${previewUrl ? `<audio controls src="${previewUrl}"></audio>`:''}
+        //     // `;
+        //
+        //     detailDiv.insertAdjacentHTML('beforeend', html);
+        // },
 
         resetTrackDetail() {
             this.inputField().songDetail.innerHTML = '';
@@ -150,7 +159,7 @@ const UIController = (function() {
 
 })();
 
-const APPController = (function(UICtrl, APICtrl) {
+const APPController = (function (UICtrl, APICtrl) {
 
     const DOMInputs = UICtrl.inputField();
 
