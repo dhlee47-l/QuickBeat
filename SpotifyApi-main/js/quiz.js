@@ -23,14 +23,11 @@ function togglePlay(audioId) {
     const audio = document.getElementById(audioId);
     const allAudios = document.querySelectorAll('audio');
 
-    // Pause all other audio elements
     allAudios.forEach(a => {
         if (a.id !== audioId && !a.paused) {
             a.pause();
         }
     });
-
-    // Toggle play/pause for clicked audio
     if (audio.paused) {
         audio.play();
     } else {
@@ -43,5 +40,5 @@ if (trackData && trackData.length > 0) {
         createTrackElement(track, index)
     ).join('');
 } else {
-    trackListDiv.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 32px; color: #666;">No tracks found.</p>';
+    trackListDiv.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 32px; color: #666;">Coming Soon!</p>';
 }

@@ -5,7 +5,8 @@ const APIController = (function () {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic ' + btoa('724a3cf2d2e44418acea58d9eea869af' + ':' + '5d9c76ea66784592853696aa94fdd310')
+                // client id, secret key
+                'Authorization': 'Basic ' + btoa('clientid' + ':' + 'secretkey')
             },
             body: 'grant_type=client_credentials'
         });
