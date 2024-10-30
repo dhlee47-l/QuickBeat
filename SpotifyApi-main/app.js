@@ -107,30 +107,6 @@ const UIController = (function () {
             document.querySelector(DOMElements.selectPlaylist).insertAdjacentHTML('beforeend', html);
         },
 
-        // createTrack(id, name) {
-        //     const html = `<a href="#" class="list-group-item list-group-item-action list-group-item-light" id="${id}">${name}</a>`;
-        //     document.querySelector(DOMElements.divSonglist).insertAdjacentHTML('beforeend', html);
-        // },
-
-        // createTrackDetail(img, title, artist, previewUrl) {
-        //     const detailDiv = document.querySelector(DOMElements.divSongDetail);
-        //     detailDiv.innerHTML = '';
-        //
-        //     // const html = `
-        //     //<div class="row col-sm-12 px-0">
-        //       <img src="${img}" alt="">
-        //     </div>
-        //     <div class="row col-sm-12 px-0">
-        //       <label for="Genre" class="form-label col-sm-12">${title}</label>
-        //     </div>
-        //     <div class="row col-sm-12 px-0">
-        //       <label for="artist" class="form-label col-sm-12">By ${artist}</label>
-        //     </div>
-        //     ${previewUrl ? `<audio controls src="${previewUrl}"></audio>`:''}
-        //     // `;
-        //
-        //     detailDiv.insertAdjacentHTML('beforeend', html);
-        // },
 
         resetTrackDetail() {
             this.inputField().songDetail.innerHTML = '';
@@ -202,7 +178,6 @@ const APPController = (function (UICtrl, APICtrl) {
         window.location.href = 'quiz.html';
     });
 
-
     DOMInputs.tracks.addEventListener('click', async (e) => {
         e.preventDefault();
         UICtrl.resetTrackDetail();
@@ -221,3 +196,4 @@ const APPController = (function (UICtrl, APICtrl) {
 })(UIController, APIController);
 
 APPController.init();
+
