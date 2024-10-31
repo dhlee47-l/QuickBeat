@@ -28,8 +28,11 @@ h2 {
     padding: 0;
 }
 
-.modal-artwork-container{
-    visibility:visible;
+.modal-artwork-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
 .artwork-container {
@@ -252,14 +255,6 @@ h2 {
     gap: 20px;
 }
 
-/*.modal-artwork {*/
-/*    !*visibility:hidden;*!*/
-/*    width: 250px;*/
-/*    height: 250px;*/
-/*    border-radius: 8px;*/
-/*    overflow: hidden;*/
-/*    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);*/
-/*}*/
 
 .modal-artwork {
     position: relative;
@@ -268,6 +263,7 @@ h2 {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
 }
 
 .question-mark-overlay {
@@ -283,14 +279,10 @@ h2 {
     z-index: 2;
 }
 
-.question-mark-overlay i {
-    font-size: 80px;
-    color: #666;
-}
-
 .question-mark-overlay .svg-inline--fa {
-    width: 120px; /* Adjust as needed */
-    height: 120px; /* Adjust as needed */
+    width: 80px !important;  /* Reduced from 120px */
+    height: 80px !important; /* Added explicit height */
+    color: #666;
 }
 
 
@@ -298,18 +290,17 @@ h2 {
     display: none;
 }
 
-
-
 .modal-artwork img {
-    /*visibility:hidden;*/
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
 .modal-track-info {
-    visibility:hidden;
+    visibility: hidden;
     text-align: center;
+    width: 100%;
+    margin-top: 16px;
 }
 
 .modal-track-info.visible{
@@ -317,7 +308,6 @@ h2 {
 }
 
 .modal-track-name {
-    /*visibility:hidden;*/
     font-size: 24px;
     font-weight: 600;
     margin-top: 8px;
@@ -325,17 +315,9 @@ h2 {
 }
 
 .modal-track-artist {
-    /*visibility:hidden;*/
     font-size: 18px;
     color: #666;
 }
-
-/*.modal-controls {*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    gap: 20px;*/
-/*    margin-top: 20px;*/
-/*}*/
 
 .modal-controls {
     display: none;
@@ -364,11 +346,6 @@ h2 {
     line-height: 0;
 }
 
-/*.modal-quiz-buttons {*/
-/*    display: flex;*/
-/*    gap: 300px;*/
-/*    margin-top: 24px;*/
-/*}*/
 
 .modal-quiz-buttons {
     display: flex;
