@@ -2,22 +2,104 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Music Mastermind</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="../css/main.css">
 </head>
 <body>
-<div>
-  <p>Let’s Shuffle & Play</p>
-  <h1>Music Mastermind</h1>
-</div>
-<!--navbar:-->
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="nav-content">
+    <div class="nav-logo">
+      <a href="index.html">
+        Music Mastermind
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="https://developer.spotify.com/documentation/web-api">Documentation</a>
+      <a href="https://open.spotify.com/">Songs</a>
+      <a href="shuffle.html">Game</a>
+    </div>
+    <div class="nav-auth">
+      <a href="shuffle.html" class="btn btn-primary">Try Free</a>
+    </div>
+  </div>
+</nav>
 
-<!--Home icon:index.html-->
-<!--Documentation: https://developer.spotify.com/documentation/web-api-->
-<!--Song:https://open.spotify.com/-->
-<!--Game:shuffle.html-->
-<button onclick="window.location.href='shuffle.html'">Try Free</button>
+<!-- Hero Section -->
+<header class="hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1>Music Mastermind</h1>
+      <h2>Let's Shuffle & Play</h2>
+      <p class="hero-description">지구오락실 음악게임이 부러웠다면?</p>
+      <div class="cta-buttons">
+        <a href="shuffle.html" class="btn btn-primary">Play Game!</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="visual-element"></div>
+    </div>
+  </div>
+</header>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js" crossorigin="anonymous"></script>
+<!-- Features Section -->
+<section class="features">
+  <div class="section-header">
+    <h2>Why Music Mastermind?</h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <i class="fas fa-puzzle-piece"></i>
+      <h3>Play & Learn</h3>
+      <p>Test your music knowledge through interactive games</p>
+    </div>
+    <div class="feature-card">
+      <i class="fas fa-music"></i>
+      <h3>Discover Music</h3>
+      <p>Explore new genres and artists every day</p>
+    </div>
+    <div class="feature-card">
+      <i class="fas fa-users"></i>
+      <h3>Join Community</h3>
+      <p>Connect with music lovers worldwide</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="#">Get Started</a></li>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Documentation</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">Community</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2024 Music Mastermind. All rights reserved.</p>
+  </div>
+</footer>
 </body>
 </html>
