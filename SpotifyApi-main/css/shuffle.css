@@ -1,49 +1,129 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
-body {
-    font-family: "Poppins", sans-serif;
+.shuffle-text {
+    padding: 8rem 2rem 2rem;
+    text-align: center;
 }
 
-.btn.dropdown-toggle {
-    width: 150px;
-    text-align: left;
+.shuffle-text h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #4ECDC4, #45b7af);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
 }
 
-span.caret {
-    position: absolute;
-    left: 90%;
-    top: 45%;
+.shuffle-text h2 {
+    font-size: 2.5rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
 }
-option {
-    border-radius: 100px;
+
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
-label {
-    padding-top: 5px;
+
+.form-group {
+    margin-bottom: 1.5rem;
 }
 
 .form-label {
-    padding-left: 0 !important;
-}
-
-img {
-    width: 200px;
-    height: 200px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+    display: block;
 }
 
 .form-control {
-    border-radius: 100px;
+    width: 100%;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
 }
 
-.btn-success {
-    background-color: #3b7d4a !important;
-    border-radius: 100px;
-    border: none;
+.form-control:focus {
+    outline: none;
+    border-color: #4ECDC4;
+    box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
 }
 
-.btn-success:hover {
-    background-color: #4daf64 !important;
+
+.btn-submit {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    max-width: 240px;
+}
+
+.btn-submit .form-group {
+    width: 100%;
+}
+
+.btn-submit .btn-success {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+}
+
+.song-list {
+    margin-top: 2rem;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.list-group-item {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #ffffff;
+}
+
+.list-group-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
 }
 
 img.track {
-    border: 1px solid #8a8a8a;
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .col-sm-5, .col-sm-2 {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .shuffle-text h1 {
+        font-size: 3rem;
+    }
+
+    .shuffle-text h2 {
+        font-size: 2rem;
+    }
+
+    .btn-submit {
+        max-width: 100%;
+    }
 }

@@ -8,25 +8,9 @@
   <link rel="stylesheet" type="text/css" href="../css/main.css">
 </head>
 <body>
-<!-- Navbar -->
-<nav class="navbar">
-  <div class="nav-content">
-    <div class="nav-logo">
-      <a href="index.html">
-        Music Mastermind
-      </a>
-    </div>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="https://developer.spotify.com/documentation/web-api">Documentation</a>
-      <a href="https://open.spotify.com/">Songs</a>
-      <a href="shuffle.html">Game</a>
-    </div>
-    <div class="nav-auth">
-      <a href="shuffle.html" class="btn btn-primary">Try Free</a>
-    </div>
-  </div>
-</nav>
+<!-- Navbar Section -->
+<div id="navbar-container"></div>
+<script src="../js/navbar.js"></script>
 
 <!-- Hero Section -->
 <header class="hero">
@@ -40,7 +24,8 @@
       </div>
     </div>
     <div class="hero-visual">
-      <div class="visual-element"></div>
+      <div class="visual-element">
+      </div>
     </div>
   </div>
 </header>
@@ -70,36 +55,8 @@
 </section>
 
 <!-- Footer -->
-<footer class="footer">
-  <div class="footer-content">
-    <div class="footer-section">
-      <h4>Platform</h4>
-      <ul>
-        <li><a href="#">Get Started</a></li>
-        <li><a href="#">Features</a></li>
-        <li><a href="#">Documentation</a></li>
-      </ul>
-    </div>
-    <div class="footer-section">
-      <h4>Company</h4>
-      <ul>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Careers</a></li>
-      </ul>
-    </div>
-    <div class="footer-section">
-      <h4>Resources</h4>
-      <ul>
-        <li><a href="#">Help Center</a></li>
-        <li><a href="#">Community</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>&copy; 2024 Music Mastermind. All rights reserved.</p>
-  </div>
-</footer>
+<div id="footer-container"></div>
+<script src="../js/footer.js"></script>
+
 </body>
 </html>

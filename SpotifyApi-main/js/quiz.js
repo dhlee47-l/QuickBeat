@@ -1,5 +1,7 @@
 const trackData = JSON.parse(localStorage.getItem('trackData'));
-const trackListDiv = document.getElementById('track-list');
+const $trackListDiv = $('#track-list');
+let answeredQuestions = new Set();
+let totalQuestions = trackData ? trackData.length : 0;
 
 const modalHTML = `
     <div class="modal-overlay" id="track-modal">
@@ -34,7 +36,21 @@ const modalHTML = `
     </div>
 `;
 
-document.body.insertAdjacentHTML('beforeend', modalHTML);
+const scoreModalHTML = `
+    <div class="score-button-container">
+        <button class="check-score-button">점수를 확인하세요!</button>
+    </div>
+    <div class="score-modal-overlay" id="score-modal">
+        <div class="score-modal-content">
+            <div class="score-text">당신의 점수는</div>
+            <div class="score-value" id="final-score"></div>
+            <button class="score-close-button" onclick="closeScoreModal()">닫기</button>
+        </div>
+    </div>
+`;
+
+$('body').append(modalHTML);
+$('body').append(scoreModalHTML);
 
 function createTrackElement(track, index) {
     return `
@@ -57,106 +73,103 @@ function createTrackElement(track, index) {
 let currentAudio = null;
 let currentTrackIndex = null;
 
-
-
 function openModal(index) {
     const track = trackData[index];
     currentTrackIndex = index;
 
-    const modalImg = document.getElementById('modal-img');
-    const modalTrackInfo = document.querySelector('.modal-track-info');
-    const questionMarkOverlay = document.querySelector('.question-mark-overlay');
+    $('#modal-img').attr('src', track.albumImage);
+    $('#modal-name').text(track.name);
+    $('#modal-artist').text(track.artist);
 
-    // Show question mark overlay and hide track info initially
-    questionMarkOverlay.classList.remove('hidden');
-    modalTrackInfo.classList.remove('visible');
+    $('#track-modal').addClass('active');
+    $('.question-mark-overlay').removeClass('hidden');
+    $('.modal-track-info').removeClass('visible');
 
-    // Set up the track data
-    modalImg.src = track.albumImage;
-    document.getElementById('modal-name').textContent = track.name;
-    document.getElementById('modal-artist').textContent = track.artist;
-
-    const modal = document.getElementById('track-modal');
-    modal.classList.add('active');
-
-    const playButton = document.getElementById('modal-play-button');
-    playButton.innerHTML = '<i class="fa-solid fa-play"></i>';
-    playButton.onclick = () => togglePlay(`audio-${index}`);
-
-    document.getElementById('modal-o-button').onclick = () => handleO(index);
-    document.getElementById('modal-x-button').onclick = () => handleX(index);
+    $('#modal-play-button').html('<i class="fa-solid fa-play"></i>').off('click').on('click', () => togglePlay(`audio-${index}`));
+    $('#modal-o-button').off('click').on('click', () => handleO(index));
+    $('#modal-x-button').off('click').on('click', () => handleX(index));
 }
 
 function closeModal() {
-    const modal = document.getElementById('track-modal');
-    modal.classList.remove('active');
-
+    $('#track-modal').removeClass('active');
     if (currentAudio && !currentAudio.paused) {
         currentAudio.pause();
     }
 }
 
 function handleO(index) {
-    const trackCover = document.getElementById(`track-cover-${index}`);
-    trackCover.style.display = 'none';
+    const $trackCover = $(`#track-cover-${index}`);
+    if ($trackCover.is(':visible')) {
+        answeredQuestions.add(index);
+    }
+    $trackCover.hide();
 
-    const questionMarkOverlay = document.querySelector('.question-mark-overlay');
-    const modalTrackInfo = document.querySelector('.modal-track-info');
-
-    // Hide question mark and show track info
-    questionMarkOverlay.classList.add('hidden');
-    modalTrackInfo.classList.add('visible');
-
+    $('.question-mark-overlay').addClass('hidden');
+    $('.modal-track-info').addClass('visible');
     closeModal();
 }
 
-
 function handleX(index) {
-    const trackItem = document.querySelectorAll('.track-item')[index];
-    const trackCover = document.getElementById(`track-cover-${index}`);
+    const $trackItem = $('.track-item').eq(index);
+    const $trackCover = $(`#track-cover-${index}`);
 
-    const existingXMark = trackItem.querySelector('.x-mark');
-    if (existingXMark) {
-        existingXMark.remove();
+    const $existingXMark = $trackItem.find('.x-mark');
+    if ($existingXMark.length) {
+        $existingXMark.remove();
     }
 
-    const xMark = document.createElement('div');
-    xMark.className = 'x-mark';
-    xMark.textContent = '×';
-    trackCover.appendChild(xMark);
-
+    const $xMark = $('<div>', { class: 'x-mark', text: '×' });
+    $trackCover.append($xMark);
     closeModal();
 }
 
 function togglePlay(audioId) {
-    const audio = document.getElementById(audioId);
-    const playButton = document.getElementById('modal-play-button');
+    const $audio = $(`#${audioId}`)[0];
+    const $playButton = $('#modal-play-button');
 
-    if (currentAudio && currentAudio !== audio && !currentAudio.paused) {
+    if (currentAudio && currentAudio !== $audio && !currentAudio.paused) {
         currentAudio.pause();
     }
 
-    if (audio.paused) {
-        audio.play();
-        playButton.innerHTML = `<i class="fa-solid fa-pause"></i>`;
-        currentAudio = audio;
+    if ($audio.paused) {
+        $audio.play();
+        $playButton.html('<i class="fa-solid fa-pause"></i>');
+        currentAudio = $audio;
     } else {
-        audio.pause();
-        playButton.innerHTML = `<i class="fa-solid fa-play"></i>`;
+        $audio.pause();
+        $playButton.html('<i class="fa-solid fa-play"></i>');
     }
 }
 
-document.getElementById('track-modal').addEventListener('click', (e) => {
-    if (e.target.classList.contains('modal-overlay')) {
+$('#track-modal').on('click', function(e) {
+    if ($(e.target).hasClass('modal-overlay')) {
         closeModal();
     }
 });
 
-if (trackData && trackData.length > 0) {
-    trackListDiv.innerHTML = trackData.map((track, index) =>
-        createTrackElement(track, index)
-    ).join('');
-} else {
-    trackListDiv.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 32px; color: #666;">Coming Soon!</p>';
+function calculateScore() {
+    return totalQuestions === 0 ? 0 : Math.round((answeredQuestions.size / totalQuestions) * 100);
 }
 
+function showScore() {
+    $('#final-score').text(`${calculateScore()}점`);
+    $('#score-modal').addClass('active');
+}
+
+function closeScoreModal() {
+    $('#score-modal').removeClass('active');
+}
+
+$('.check-score-button').on('click', showScore);
+
+$('#score-modal').on('click', function(e) {
+    if ($(e.target).hasClass('score-modal-overlay')) {
+        closeScoreModal();
+    }
+});
+
+if (trackData && trackData.length > 0) {
+    $trackListDiv.html(trackData.map((track, index) => createTrackElement(track, index)).join(''));
+} else {
+    $trackListDiv.html('<p style="grid-column: 1/-1; text-align: center; padding: 32px; color: #666;">Coming Soon!</p>');
+}
