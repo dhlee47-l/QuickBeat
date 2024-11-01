@@ -36,7 +36,6 @@ h2 {
 }
 
 .artwork-container {
-
     position: relative;
     aspect-ratio: 1;
     border-radius: 6px;
@@ -197,7 +196,6 @@ h2 {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Modal styles */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -281,8 +279,8 @@ h2 {
 }
 
 .question-mark-overlay .svg-inline--fa {
-    width: 80px !important;  /* Reduced from 120px */
-    height: 80px !important; /* Added explicit height */
+    width: 80px !important;
+    height: 80px !important;
     color: #666;
 }
 
@@ -381,14 +379,6 @@ h2 {
     color: #8B4513;
 }
 
-@media (max-width: 768px) {
-    .track-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 16px;
-    }
-}
-
-
 
 .visible {
     visibility: visible !important;
@@ -479,4 +469,11 @@ h2 {
 
 .score-close-button:hover {
     background: #ff5252;
+}
+
+@media (max-width: 768px) {
+    .track-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 16px;
+    }
 }

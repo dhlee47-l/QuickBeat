@@ -6,6 +6,7 @@
   <title>Music Mastermind Shuffle</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" type="text/css" href="../css/shuffle.css">
+  <link rel="stylesheet" type="text/css" href="../css/main.css">
 </head>
 <body>
 <div id="navbar-container"></div>
@@ -17,43 +18,46 @@
   <p class="hero-description">지구오락실 음악게임이 부러웠다면?</p>
 </div>
 
-<div class="container">
-  <form>
+<div class="content-tile" id="search-section">
+  <form class="search-form">
     <input type="hidden" id="hidden_token">
-    <div class="row">
-      <div class="col-sm-6">
-        <div class="form-group">
-          <label for="select_genre" class="form-label">Genre</label>
-          <select id="select_genre" class="form-control">
-            <option>Select...</option>
-          </select>
-        </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <select id="select_genre" class="form-select">
+          <option>Genre</option>
+        </select>
       </div>
-      <div class="col-sm-6">
-        <div class="form-group">
-          <label for="select_playlist" class="form-label">Keyword</label>
-          <select id="select_playlist" class="form-control">
-            <option>Select...</option>
-          </select>
-        </div>
+      <div class="form-group">
+        <select id="select_playlist" class="form-select">
+          <option>Keyword</option>
+        </select>
       </div>
-<!--      <div class="col-sm-2">-->
-      <div class="col-sm-6 btn-submit">
-        <div class="form-group">
-          <label class="form-label">&nbsp;</label>
-          <button type="submit" id="btn_submit" class="btn btn-success form-control">Search</button>
-        </div>
-      </div>
+      <button type="submit" id="btn_submit" class="submit-button">
+        <span>Search</span>
+        <i class="fas fa-arrow-right"></i>
+      </button>
     </div>
   </form>
+</div>
 
-  <div class="row">
-    <div class="col-sm-6 px-0">
-      <div class="list-group song-list"></div>
-    </div>
-    <div class="offset-md-1 col-sm-4" id="song-detail"></div>
+<!-- New Coming Soon Section -->
+<div class="coming-soon-section" id="coming-soon-section" style="display: none;">
+  <div class="coming-soon-content">
+    <h2>Coming Soon!</h2>
+    <p>Your favorite playlists are about to be updated very soon.</p>
+    <p>Please choose the genre again!</p>
+    <button id="go-back-button" class="go-back-button">
+      <i class="fas fa-arrow-left"></i>
+      <span>Go Back and Choose Again!</span>
+    </button>
   </div>
 </div>
+
+<div class="results-container">
+  <div class="song-list"></div>
+  <div id="song-detail"></div>
+</div>
+
 <div id="footer-container"></div>
 <script src="../js/footer.js"></script>
 

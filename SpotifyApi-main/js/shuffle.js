@@ -76,15 +76,17 @@ const APIController = (function () {
     }
 })();
 
-const UIController = (function () {
-
+const UIController = (function() {
     const DOMElements = {
         selectGenre: '#select_genre',
         selectPlaylist: '#select_playlist',
         buttonSubmit: '#btn_submit',
         divSongDetail: '#song-detail',
         hfToken: '#hidden_token',
-        divSonglist: '.song-list'
+        divSonglist: '.song-list',
+        searchSection: '#search-section',
+        comingSoonSection: '#coming-soon-section',
+        goBackButton: '#go-back-button',
     }
 
     return {
@@ -94,7 +96,7 @@ const UIController = (function () {
                 playlist: document.querySelector(DOMElements.selectPlaylist),
                 tracks: document.querySelector(DOMElements.divSonglist),
                 submit: document.querySelector(DOMElements.buttonSubmit),
-                songDetail: document.querySelector(DOMElements.divSongDetail)
+                songDetail: document.querySelector(DOMElements.divSongDetail),
             }
         },
 
@@ -108,7 +110,6 @@ const UIController = (function () {
             document.querySelector(DOMElements.selectPlaylist).insertAdjacentHTML('beforeend', html);
         },
 
-
         resetTrackDetail() {
             this.inputField().songDetail.innerHTML = '';
         },
@@ -119,7 +120,7 @@ const UIController = (function () {
         },
 
         resetPlaylist() {
-            this.inputField().playlist.innerHTML = '';
+            this.inputField().playlist.innerHTML = '<option>Keyword</option>';
             this.resetTracks();
         },
 
@@ -131,14 +132,28 @@ const UIController = (function () {
             return {
                 token: document.querySelector(DOMElements.hfToken).value
             }
+        },
+
+        showComingSoon() {
+            document.querySelector(DOMElements.searchSection).style.display = 'none';
+            document.querySelector(DOMElements.comingSoonSection).style.display = 'block';
+        },
+
+        hideComingSoon() {
+            document.querySelector(DOMElements.searchSection).style.display = 'block';
+            document.querySelector(DOMElements.comingSoonSection).style.display = 'none';
+        },
+
+        getDOMElements() {
+            return DOMElements;
         }
     }
-
 })();
 
 const APPController = (function (UICtrl, APICtrl) {
 
     const DOMInputs = UICtrl.inputField();
+    const DOMElements = UICtrl.getDOMElements();
 
     const loadGenres = async () => {
         const token = await APICtrl.getToken();
@@ -147,13 +162,31 @@ const APPController = (function (UICtrl, APICtrl) {
         genres.forEach(element => UICtrl.createGenre(element.name, element.id));
     }
 
+    document.querySelector(DOMElements.goBackButton).addEventListener('click', () => {
+        UICtrl.hideComingSoon();
+        DOMInputs.genre.selectedIndex = 0;
+        UICtrl.resetPlaylist();
+    });
+
     DOMInputs.genre.addEventListener('change', async () => {
         UICtrl.resetPlaylist();
         const token = UICtrl.getStoredToken().token;
         const genreSelect = UICtrl.inputField().genre;
         const genreId = genreSelect.options[genreSelect.selectedIndex].value;
-        const playlists = await APICtrl.getPlaylistByGenre(token, genreId);
-        playlists.forEach(p => UICtrl.createPlaylist(p.name, p.tracks.href));
+        try {
+            const playlists = await APICtrl.getPlaylistByGenre(token, genreId);
+
+            if (!playlists || playlists.length === 0) {
+                UICtrl.showComingSoon();
+                return;
+            }
+
+            UICtrl.hideComingSoon();
+            playlists.forEach(p => UICtrl.createPlaylist(p.name, p.tracks.href));
+        } catch (error) {
+            console.error('Error fetching playlists:', error);
+            UICtrl.showComingSoon();
+        }
     });
 
     DOMInputs.submit.addEventListener('click', async (e) => {
@@ -191,6 +224,7 @@ const APPController = (function (UICtrl, APICtrl) {
     return {
         init() {
             loadGenres();
+            UICtrl.hideComingSoon();
         }
     }
 

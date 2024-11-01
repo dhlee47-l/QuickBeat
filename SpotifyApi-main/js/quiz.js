@@ -141,19 +141,27 @@ function togglePlay(audioId) {
     }
 }
 
-$('#track-modal').on('click', function(e) {
-    if ($(e.target).hasClass('modal-overlay')) {
-        closeModal();
-    }
-});
+function startConfetti() {
+    confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+    });
+}
 
 function calculateScore() {
     return totalQuestions === 0 ? 0 : Math.round((answeredQuestions.size / totalQuestions) * 100);
 }
 
 function showScore() {
-    $('#final-score').text(`${calculateScore()}점`);
+    const score = calculateScore();
+    $('#final-score').text(`${score}점`);
     $('#score-modal').addClass('active');
+
+    // Add confetti effect when score is 100
+    if (score === 100) {
+        startConfetti();
+    }
 }
 
 function closeScoreModal() {
@@ -165,6 +173,12 @@ $('.check-score-button').on('click', showScore);
 $('#score-modal').on('click', function(e) {
     if ($(e.target).hasClass('score-modal-overlay')) {
         closeScoreModal();
+    }
+});
+
+$('#track-modal').on('click', function(e) {
+    if ($(e.target).hasClass('modal-overlay')) {
+        closeModal();
     }
 });
 

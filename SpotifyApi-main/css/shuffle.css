@@ -1,129 +1,240 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap");
+
+body {
+    font-family: "Poppins", sans-serif;
+    background: #000;
+    color: #fff;
+}
 
 .shuffle-text {
-    padding: 8rem 2rem 2rem;
+    padding: 6rem 2rem 3rem;
     text-align: center;
 }
 
 .shuffle-text h1 {
-    font-size: 4rem;
-    font-weight: 900;
-    background: linear-gradient(135deg, #4ECDC4, #45b7af);
+    font-size: 3.5rem;
+    font-weight: 700;
+    background: #4ECDC4;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .shuffle-text h2 {
-    font-size: 2.5rem;
-    color: #ffffff;
-    margin-bottom: 1rem;
-}
-
-
-.container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-label {
-    font-weight: 600;
+    font-size: 2rem;
     color: #ffffff;
     margin-bottom: 0.5rem;
-    display: block;
+    font-weight: 500;
 }
 
-.form-control {
+.hero-description {
+    color: #86868b;
+    font-size: 1.1rem;
+}
+
+.content-tile {
+    max-width: 980px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.search-form {
+    background: rgba(22, 22, 23, 0.8);
+    border-radius: 18px;
+    backdrop-filter: blur(20px);
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+    gap: 1rem;
+    align-items: center;
+}
+
+.form-select {
     width: 100%;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    padding: 0.8rem 1rem;
     border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
     font-size: 0.95rem;
     transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background:
+            rgba(255, 255, 255, 0.08)
+            url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")
+            no-repeat right 1rem center;
+    background-size: 1em;
 }
 
-.form-control:focus {
+.form-select:focus {
     outline: none;
     border-color: #4ECDC4;
-    box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+    background-color: rgba(255, 255, 255, 0.12);
 }
 
-
-.btn-submit {
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    max-width: 240px;
-}
-
-.btn-submit .form-group {
-    width: 100%;
-}
-
-.btn-submit .btn-success {
-    width: 100%;
-    padding: 0.75rem 1.5rem;
-}
-
-.song-list {
-    margin-top: 2rem;
+.submit-button {
+    background: #4ECDC4;
+    color: #000;
+    border: none;
     border-radius: 12px;
-    overflow: hidden;
-}
-
-.list-group-item {
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.submit-button:hover {
+    background: #45b7af;
+    transform: translateY(-2px);
+}
+
+.results-container {
+    max-width: 980px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.song-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.list-group-item {
+    background: rgba(22, 22, 23, 0.8);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
     gap: 1rem;
-    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
 }
 
 .list-group-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    transform: translateX(5px);
+    transform: scale(1.02);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 img.track {
     width: 60px;
     height: 60px;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    object-fit: cover;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .container {
-        margin: 1rem;
-        padding: 1rem;
-    }
+.coming-soon-section {
+    max-width: 980px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
 
-    .col-sm-5, .col-sm-2 {
-        width: 100%;
-        margin-bottom: 1rem;
+.coming-soon-content {
+    background: rgba(22, 22, 23, 0.8);
+    border-radius: 18px;
+    backdrop-filter: blur(20px);
+    padding: 3rem 2rem;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.coming-soon-content h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #4ECDC4, #45b7af);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1.5rem;
+}
+
+.coming-soon-content p {
+    color: #86868b;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.go-back-button {
+    margin-top: 2rem;
+    background: #4ECDC4;
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.go-back-button:hover {
+    background: #45b7af;
+    transform: translateY(-2px);
+}
+
+.go-back-button i {
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
     }
 
     .shuffle-text h1 {
-        font-size: 3rem;
+        font-size: 2.5rem;
     }
 
     .shuffle-text h2 {
+        font-size: 1.5rem;
+    }
+
+    .content-tile {
+        margin: 1rem;
+    }
+
+    .song-list {
+        grid-template-columns: 1fr;
+    }
+
+    .coming-soon-content h2 {
         font-size: 2rem;
     }
 
-    .btn-submit {
-        max-width: 100%;
+    .coming-soon-content p {
+        font-size: 1rem;
+    }
+
+    .go-back-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
     }
 }
+
