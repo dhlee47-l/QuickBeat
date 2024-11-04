@@ -6,7 +6,7 @@ const APIController = (function () {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 // client id, secret key
-                'Authorization': 'Basic ' + btoa('clientid' + ':' + 'secretkey')
+                'Authorization': 'Basic ' + btoa('724a3cf2d2e44418acea58d9eea869af' + ':' + '5d9c76ea66784592853696aa94fdd310')
             },
             body: 'grant_type=client_credentials'
         });
@@ -244,7 +244,7 @@ const APPController = (function(UICtrl, APICtrl) {
         const genreSelect = DOMInputs.genre;
         const playlistSelect = DOMInputs.playlist;
 
-        // Form Validation
+        // Form Validation 조건
         if (genreSelect.selectedIndex === 0) {
             UICtrl.showError('Please select a genre');
             return;
@@ -268,16 +268,16 @@ const APPController = (function(UICtrl, APICtrl) {
                 return;
             }
 
-            const trackData = tracks.map(el => ({
-                id: el.track.href,
-                name: el.track.name,
-                artist: el.track.artists[0].name,
-                albumImage: el.track.album.images[0].url,
-                previewUrl: el.track.preview_url
+            const trackData = tracks.map(e => ({
+                id: e.track.href,
+                name: e.track.name,
+                artist: e.track.artists[0].name,
+                albumImage: e.track.album.images[0].url,
+                previewUrl: e.track.preview_url
             }));
 
             localStorage.setItem('trackData', JSON.stringify(trackData));
-            window.location.href = 'quiz.html';
+            window.location.href = 'qr.html';
         } catch (error) {
             console.error('Error fetching tracks:', error);
             UICtrl.showError('Error loading tracks. Please try again.');

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Beat QR Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/qr.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <script src="../js/navbar.js"></script>
+
+    <div class="qr-container">
+        <h2>Quiz Answer Preview</h2>
+        <div class="explanation">
+          퀴즈를 출제하는 분이라면, 정답을 미리 확인하기 위해 QR 코드를 스캔하세요.<br>
+          그렇지 않은 경우, Next 버튼을 눌러주세요.
+        </div>
+        <div id="qrcode" class="qr-code"></div>
+        <button class="skip-button" onclick="goToQuiz()">Next</button>
+    </div>
+
+    <div id="answer-sheet" class="answer-sheet">
+        <div class="track-grid" id="track-list"></div>
+    </div>
+
+    <div id="footer-container"></div>
+    <script src="../js/footer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="../js/qr.js"></script>
+</body>
+</html>

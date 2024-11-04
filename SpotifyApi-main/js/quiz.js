@@ -158,7 +158,6 @@ function showScore() {
     $('#final-score').text(`${score}점`);
     $('#score-modal').addClass('active');
 
-    // Add confetti effect when score is 100
     if (score === 100) {
         startConfetti();
     }
