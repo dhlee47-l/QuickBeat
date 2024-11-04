@@ -203,6 +203,10 @@ img.track {
     font-size: 1.1rem;
 }
 
+.submit-button:disabled {
+    cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
     .form-grid {
         grid-template-columns: 1fr;

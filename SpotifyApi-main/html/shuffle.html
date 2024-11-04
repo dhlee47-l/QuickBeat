@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Music Mastermind Shuffle</title>
+  <title>Quick Beat Shuffle</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" type="text/css" href="../css/shuffle.css">
   <link rel="stylesheet" type="text/css" href="../css/main.css">
@@ -13,8 +13,8 @@
 <script src="../js/navbar.js"></script>
 
 <div class="shuffle-text">
-  <h1>Music Mastermind</h1>
-  <h2>Let's Shuffle & Play</h2>
+  <h1>Quick Beat</h1>
+  <h2>Choose the Genre and Keyword to play!</h2>
   <p class="hero-description">지구오락실 음악게임이 부러웠다면?</p>
 </div>
 
@@ -23,15 +23,16 @@
     <input type="hidden" id="hidden_token">
     <div class="form-grid">
       <div class="form-group">
-        <select id="select_genre" class="form-select">
-          <option>Genre</option>
+        <select id="select_genre" class="form-select" required>
+          <option value="">Genre</option>
         </select>
       </div>
       <div class="form-group">
-        <select id="select_playlist" class="form-select">
-          <option>Keyword</option>
+        <select id="select_playlist" class="form-select" required>
+          <option value="">Keyword</option>
         </select>
       </div>
+      <div id="error-message" class="error-message" style="display: none;"></div>
       <button type="submit" id="btn_submit" class="submit-button">
         <span>Search</span>
         <i class="fas fa-arrow-right"></i>
@@ -40,7 +41,6 @@
   </form>
 </div>
 
-<!-- New Coming Soon Section -->
 <div class="coming-soon-section" id="coming-soon-section" style="display: none;">
   <div class="coming-soon-content">
     <h2>Coming Soon!</h2>

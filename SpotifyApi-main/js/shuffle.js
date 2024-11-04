@@ -87,6 +87,8 @@ const UIController = (function() {
         searchSection: '#search-section',
         comingSoonSection: '#coming-soon-section',
         goBackButton: '#go-back-button',
+        errorMessage: '#error-message',
+        form: '.search-form'
     }
 
     return {
@@ -97,6 +99,7 @@ const UIController = (function() {
                 tracks: document.querySelector(DOMElements.divSonglist),
                 submit: document.querySelector(DOMElements.buttonSubmit),
                 songDetail: document.querySelector(DOMElements.divSongDetail),
+                form: document.querySelector(DOMElements.form)
             }
         },
 
@@ -120,7 +123,7 @@ const UIController = (function() {
         },
 
         resetPlaylist() {
-            this.inputField().playlist.innerHTML = '<option>Keyword</option>';
+            this.inputField().playlist.innerHTML = '<option value="">Keyword</option>';
             this.resetTracks();
         },
 
@@ -144,36 +147,70 @@ const UIController = (function() {
             document.querySelector(DOMElements.comingSoonSection).style.display = 'none';
         },
 
+        showError(message) {
+            const errorDiv = document.querySelector(DOMElements.errorMessage);
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        },
+
+        hideError() {
+            const errorDiv = document.querySelector(DOMElements.errorMessage);
+            errorDiv.style.display = 'none';
+        },
+
+        disableSubmit() {
+            this.inputField().submit.disabled = true;
+            this.inputField().submit.style.opacity = '0.5';
+        },
+
+        enableSubmit() {
+            this.inputField().submit.disabled = false;
+            this.inputField().submit.style.opacity = '1';
+        },
+
         getDOMElements() {
             return DOMElements;
         }
     }
 })();
 
-const APPController = (function (UICtrl, APICtrl) {
-
+const APPController = (function(UICtrl, APICtrl) {
     const DOMInputs = UICtrl.inputField();
     const DOMElements = UICtrl.getDOMElements();
 
     const loadGenres = async () => {
-        const token = await APICtrl.getToken();
-        UICtrl.storeToken(token);
-        const genres = await APICtrl.getGenres(token);
-        genres.forEach(element => UICtrl.createGenre(element.name, element.id));
+        try {
+            const token = await APICtrl.getToken();
+            UICtrl.storeToken(token);
+            const genres = await APICtrl.getGenres(token);
+            genres.forEach(element => UICtrl.createGenre(element.name, element.id));
+        } catch (error) {
+            console.error('Error loading genres:', error);
+            UICtrl.showError('Failed to load genres. Please refresh the page.');
+        }
     }
 
     document.querySelector(DOMElements.goBackButton).addEventListener('click', () => {
         UICtrl.hideComingSoon();
+        UICtrl.hideError();
         DOMInputs.genre.selectedIndex = 0;
         UICtrl.resetPlaylist();
+        UICtrl.disableSubmit();
     });
 
     DOMInputs.genre.addEventListener('change', async () => {
         UICtrl.resetPlaylist();
-        const token = UICtrl.getStoredToken().token;
-        const genreSelect = UICtrl.inputField().genre;
-        const genreId = genreSelect.options[genreSelect.selectedIndex].value;
+        UICtrl.hideError();
+        UICtrl.disableSubmit();
+
+        const genreSelect = DOMInputs.genre;
+        if (genreSelect.selectedIndex === 0) {
+            return;
+        }
+
         try {
+            const token = UICtrl.getStoredToken().token;
+            const genreId = genreSelect.options[genreSelect.selectedIndex].value;
             const playlists = await APICtrl.getPlaylistByGenre(token, genreId);
 
             if (!playlists || playlists.length === 0) {
@@ -186,49 +223,75 @@ const APPController = (function (UICtrl, APICtrl) {
         } catch (error) {
             console.error('Error fetching playlists:', error);
             UICtrl.showComingSoon();
+            UICtrl.showError('Error loading playlists. Please try again.');
         }
     });
 
-    DOMInputs.submit.addEventListener('click', async (e) => {
-        e.preventDefault();
-        UICtrl.resetTracks();
+    DOMInputs.playlist.addEventListener('change', () => {
+        UICtrl.hideError();
+        const playlistSelect = DOMInputs.playlist;
 
-        const token = UICtrl.getStoredToken().token;
-        const playlistSelect = UICtrl.inputField().playlist;
-        const tracksEndPoint = playlistSelect.options[playlistSelect.selectedIndex].value;
-
-        const tracks = await APICtrl.getTracks(token, tracksEndPoint);
-
-        const trackData = tracks.map(el => ({
-            id: el.track.href,
-            name: el.track.name,
-            artist: el.track.artists[0].name,
-            albumImage: el.track.album.images[0].url,
-            previewUrl: el.track.preview_url
-        }));
-
-        localStorage.setItem('trackData', JSON.stringify(trackData));
-
-        window.location.href = 'quiz.html';
+        if (playlistSelect.selectedIndex === 0) {
+            UICtrl.disableSubmit();
+        } else {
+            UICtrl.enableSubmit();
+        }
     });
 
-    DOMInputs.tracks.addEventListener('click', async (e) => {
+    DOMInputs.form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        UICtrl.resetTrackDetail();
-        const token = UICtrl.getStoredToken().token;
-        const trackEndpoint = e.target.id;
-        const track = await APICtrl.getTrack(token, trackEndpoint);
-        UICtrl.createTrackDetail(track.album.images[0].url, track.name, track.artists[0].name, track.preview_url);
+
+        const genreSelect = DOMInputs.genre;
+        const playlistSelect = DOMInputs.playlist;
+
+        // Form Validation
+        if (genreSelect.selectedIndex === 0) {
+            UICtrl.showError('Please select a genre');
+            return;
+        }
+
+        if (playlistSelect.selectedIndex === 0) {
+            UICtrl.showError('Please select a keyword');
+            return;
+        }
+
+        UICtrl.hideError();
+        UICtrl.resetTracks();
+
+        try {
+            const token = UICtrl.getStoredToken().token;
+            const tracksEndPoint = playlistSelect.options[playlistSelect.selectedIndex].value;
+            const tracks = await APICtrl.getTracks(token, tracksEndPoint);
+
+            if (!tracks || tracks.length === 0) {
+                UICtrl.showError('No tracks found in this playlist');
+                return;
+            }
+
+            const trackData = tracks.map(el => ({
+                id: el.track.href,
+                name: el.track.name,
+                artist: el.track.artists[0].name,
+                albumImage: el.track.album.images[0].url,
+                previewUrl: el.track.preview_url
+            }));
+
+            localStorage.setItem('trackData', JSON.stringify(trackData));
+            window.location.href = 'quiz.html';
+        } catch (error) {
+            console.error('Error fetching tracks:', error);
+            UICtrl.showError('Error loading tracks. Please try again.');
+        }
     });
 
     return {
         init() {
             loadGenres();
             UICtrl.hideComingSoon();
+            UICtrl.hideError();
+            UICtrl.disableSubmit();
         }
     }
-
 })(UIController, APIController);
 
 APPController.init();
-

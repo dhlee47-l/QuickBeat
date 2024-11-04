@@ -131,6 +131,11 @@ body {
     color: white;
 }
 
+.btn-main {
+    padding: 1.2rem 2.4rem;
+    font-size: 1.4rem;
+}
+
 .btn-primary:hover {
     box-shadow: 0 8px 24px rgba(93, 250, 124, 0.3);
 }
@@ -192,7 +197,7 @@ body {
 .footer {
     background-color: var(--background-dark);
     padding: 6rem 2rem 2rem;
-    margin-top: auto;
+    margin-top: 100px;
 }
 
 .footer-content {
