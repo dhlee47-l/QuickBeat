@@ -245,15 +245,15 @@ const APPController = (function(UICtrl, APICtrl) {
         const playlistSelect = DOMInputs.playlist;
 
         // Form Validation 조건
-        if (genreSelect.selectedIndex === 0) {
-            UICtrl.showError('Please select a genre');
-            return;
-        }
+        // if (genreSelect.selectedIndex === 0) {
+        //     UICtrl.showError('Please select a genre');
+        //     return;
+        // }
 
-        if (playlistSelect.selectedIndex === 0) {
-            UICtrl.showError('Please select a keyword');
-            return;
-        }
+        // if (playlistSelect.selectedIndex === 0) {
+        //     UICtrl.showError('Please select a keyword');
+        //     return;
+        // }
 
         UICtrl.hideError();
         UICtrl.resetTracks();
@@ -263,6 +263,7 @@ const APPController = (function(UICtrl, APICtrl) {
             const tracksEndPoint = playlistSelect.options[playlistSelect.selectedIndex].value;
             const tracks = await APICtrl.getTracks(token, tracksEndPoint);
 
+            //Form Validation 조건
             if (!tracks || tracks.length === 0) {
                 UICtrl.showError('No tracks found in this playlist');
                 return;
