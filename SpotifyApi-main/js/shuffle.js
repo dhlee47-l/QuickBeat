@@ -6,7 +6,7 @@ const APIController = (function () {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 // client id, secret key
-                'Authorization': 'Basic ' + btoa('724a3cf2d2e44418acea58d9eea869af' + ':' + '5d9c76ea66784592853696aa94fdd310')
+                'Authorization': 'Basic ' + btoa('clientid' + ':' + 'secretkey')
             },
             body: 'grant_type=client_credentials'
         });
@@ -47,16 +47,6 @@ const APIController = (function () {
         return data.items.filter(item => item.track.preview_url !== null);
     }
 
-    const _getTrack = async (token, trackEndPoint) => {
-        const result = await fetch(`${trackEndPoint}`, {
-            method: 'GET',
-            headers: {'Authorization': 'Bearer ' + token}
-        });
-
-        const data = await result.json();
-        return data;
-    }
-
     return {
         getToken() {
             return _getToken();
@@ -70,10 +60,66 @@ const APIController = (function () {
         getTracks(token, tracksEndPoint) {
             return _getTracks(token, tracksEndPoint);
         },
-        getTrack(token, trackEndPoint) {
-            return _getTrack(token, trackEndPoint);
-        }
     }
+})();
+
+const FormValidator = (function() {
+    // Validation rules
+    const rules = {
+        genre: {
+            required: true,
+            message: 'Please select a genre'
+        },
+        playlist: {
+            required: true,
+            message: 'Please select a keyword'
+        }
+    };
+
+    // Error states tracking
+    const errors = new Map();
+
+    const validateGenre = (value) => {
+        if (!value || value === "0" || value === "") {
+            return rules.genre.message;
+        }
+        return null;
+    };
+
+    const validatePlaylist = (value) => {
+        if (!value || value === "0" || value === "") {
+            return rules.playlist.message;
+        }
+        return null;
+    };
+
+    return {
+        validateForm(genre, playlist) {
+            errors.clear();
+
+            const genreError = validateGenre(genre.value);
+            const playlistError = validatePlaylist(playlist.value);
+
+            if (genreError) errors.set('genre', genreError);
+            if (playlistError) errors.set('playlist', playlistError);
+
+            return {
+                isValid: errors.size === 0,
+                errors: Object.fromEntries(errors)
+            };
+        },
+
+        validateField(fieldName, value) {
+            switch(fieldName) {
+                case 'genre':
+                    return validateGenre(value);
+                case 'playlist':
+                    return validatePlaylist(value);
+                default:
+                    return null;
+            }
+        }
+    };
 })();
 
 const UIController = (function() {
@@ -147,6 +193,33 @@ const UIController = (function() {
             document.querySelector(DOMElements.comingSoonSection).style.display = 'none';
         },
 
+
+
+        showFieldError(fieldName, message) {
+            const field = document.querySelector(DOMElements[`select${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}`]);
+            field.classList.add('error');
+
+            // Create or update error message element
+            let errorDiv = field.nextElementSibling;
+            if (!errorDiv || !errorDiv.classList.contains('field-error')) {
+                errorDiv = document.createElement('div');
+                errorDiv.classList.add('field-error');
+                field.parentNode.insertBefore(errorDiv, field.nextSibling);
+            }
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        },
+
+        clearFieldError(fieldName) {
+            const field = document.querySelector(DOMElements[`select${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}`]);
+            field.classList.remove('error');
+
+            const errorDiv = field.nextElementSibling;
+            if (errorDiv && errorDiv.classList.contains('field-error')) {
+                errorDiv.style.display = 'none';
+            }
+        },
+
         showError(message) {
             const errorDiv = document.querySelector(DOMElements.errorMessage);
             errorDiv.textContent = message;
@@ -156,6 +229,13 @@ const UIController = (function() {
         hideError() {
             const errorDiv = document.querySelector(DOMElements.errorMessage);
             errorDiv.style.display = 'none';
+        },
+
+        clearAllErrors() {
+            ['genre', 'playlist'].forEach(fieldName => {
+                this.clearFieldError(fieldName);
+            });
+            this.hideError();
         },
 
         disableSubmit() {
@@ -171,10 +251,12 @@ const UIController = (function() {
         getDOMElements() {
             return DOMElements;
         }
-    }
+
+    };
 })();
 
-const APPController = (function(UICtrl, APICtrl) {
+
+const APPController = (function(UICtrl, APICtrl, FormValidator) {
     const DOMInputs = UICtrl.inputField();
     const DOMElements = UICtrl.getDOMElements();
 
@@ -200,17 +282,18 @@ const APPController = (function(UICtrl, APICtrl) {
 
     DOMInputs.genre.addEventListener('change', async () => {
         UICtrl.resetPlaylist();
-        UICtrl.hideError();
+        UICtrl.clearAllErrors();
         UICtrl.disableSubmit();
 
-        const genreSelect = DOMInputs.genre;
-        if (genreSelect.selectedIndex === 0) {
+        const error = FormValidator.validateField('genre', DOMInputs.genre.value);
+        if (error) {
+            UICtrl.showFieldError('genre', error);
             return;
         }
 
         try {
             const token = UICtrl.getStoredToken().token;
-            const genreId = genreSelect.options[genreSelect.selectedIndex].value;
+            const genreId = DOMInputs.genre.options[DOMInputs.genre.selectedIndex].value;
             const playlists = await APICtrl.getPlaylistByGenre(token, genreId);
 
             if (!playlists || playlists.length === 0) {
@@ -228,10 +311,11 @@ const APPController = (function(UICtrl, APICtrl) {
     });
 
     DOMInputs.playlist.addEventListener('change', () => {
-        UICtrl.hideError();
-        const playlistSelect = DOMInputs.playlist;
+        UICtrl.clearFieldError('playlist');
+        const error = FormValidator.validateField('playlist', DOMInputs.playlist.value);
 
-        if (playlistSelect.selectedIndex === 0) {
+        if (error) {
+            UICtrl.showFieldError('playlist', error);
             UICtrl.disableSubmit();
         } else {
             UICtrl.enableSubmit();
@@ -240,30 +324,25 @@ const APPController = (function(UICtrl, APICtrl) {
 
     DOMInputs.form.addEventListener('submit', async (e) => {
         e.preventDefault();
-
-        const genreSelect = DOMInputs.genre;
-        const playlistSelect = DOMInputs.playlist;
-
-        // Form Validation 조건
-        // if (genreSelect.selectedIndex === 0) {
-        //     UICtrl.showError('Please select a genre');
-        //     return;
-        // }
-
-        // if (playlistSelect.selectedIndex === 0) {
-        //     UICtrl.showError('Please select a keyword');
-        //     return;
-        // }
-
-        UICtrl.hideError();
         UICtrl.resetTracks();
+        UICtrl.clearAllErrors();
+
+        const validation = FormValidator.validateForm(DOMInputs.genre, DOMInputs.playlist);
+
+        if (!validation.isValid) {
+            Object.entries(validation.errors).forEach(([field, message]) => {
+                UICtrl.showFieldError(field, message);
+            });
+            return;
+        }
 
         try {
             const token = UICtrl.getStoredToken().token;
-            const tracksEndPoint = playlistSelect.options[playlistSelect.selectedIndex].value;
+            const selectedPlaylist = DOMInputs.playlist;
+            const tracksEndPoint = selectedPlaylist.options[selectedPlaylist.selectedIndex].value;
+
             const tracks = await APICtrl.getTracks(token, tracksEndPoint);
 
-            //Form Validation 조건
             if (!tracks || tracks.length === 0) {
                 UICtrl.showError('No tracks found in this playlist');
                 return;
@@ -293,6 +372,8 @@ const APPController = (function(UICtrl, APICtrl) {
             UICtrl.disableSubmit();
         }
     }
-})(UIController, APIController);
+
+})(UIController, APIController, FormValidator);
 
 APPController.init();
+
