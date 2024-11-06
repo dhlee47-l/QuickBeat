@@ -6,7 +6,7 @@ const APIController = (function () {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 // client id, secret key
-                'Authorization': 'Basic ' + btoa('clientid' + ':' + 'secretkey')
+                'Authorization': 'Basic ' + btoa('client_id' + ':' + 'secret_key')
             },
             body: 'grant_type=client_credentials'
         });
@@ -76,7 +76,6 @@ const FormValidator = (function() {
         }
     };
 
-    // Error states tracking
     const errors = new Map();
 
     const validateGenre = (value) => {
@@ -109,8 +108,8 @@ const FormValidator = (function() {
             };
         },
 
-        validateField(fieldName, value) {
-            switch(fieldName) {
+        validateField(field, value) {
+            switch(field) {
                 case 'genre':
                     return validateGenre(value);
                 case 'playlist':

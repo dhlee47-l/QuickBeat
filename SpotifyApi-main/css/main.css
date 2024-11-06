@@ -269,6 +269,14 @@ body {
 }
 
 @media (max-width: 768px) {
+    .navbar {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .navbar.hidden {
+        transform: translateY(-100%);
+    }
+
     .nav-content {
         flex-direction: column;
         gap: 1.5rem;
