@@ -1,12 +1,10 @@
 const APIController = (function () {
-
     const _getToken = async () => {
         const result = await fetch('https://accounts.spotify.com/api/token', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                // client id, secret key
-                'Authorization': 'Basic ' + btoa('client_id' + ':' + 'secret_key')
+                'Authorization': 'Basic ' + btoa('724a3cf2d2e44418acea58d9eea869af' + ':' + 'b330b0a626024564b802102b8f4b23f5')
             },
             body: 'grant_type=client_credentials'
         });
@@ -16,7 +14,7 @@ const APIController = (function () {
     }
 
     const _getGenres = async (token) => {
-        const result = await fetch(`https://api.spotify.com/v1/browse/categories?locale=sv_KR`, {
+        const result = await fetch(`https://api.spotify.com/v1/browse/categories?locale=ko_KR`, {
             method: 'GET',
             headers: {'Authorization': 'Bearer ' + token}
         });
@@ -25,27 +23,81 @@ const APIController = (function () {
         return data.categories.items;
     }
 
-    const _getPlaylistByGenre = async (token, genreId) => {
-        const limit = 20;
-        const result = await fetch(`https://api.spotify.com/v1/browse/categories/${genreId}/playlists?limit=${limit}`, {
-            method: 'GET',
-            headers: {'Authorization': 'Bearer ' + token}
-        });
+    const _getPlaylistByGenre = async (token, genreName) => {
+        const limit = 50; // 더 많은 데이터를 가져옴
+        try {
+            // popularity 관련 키워드를 추가하여 검색
+            const queryParam = encodeURIComponent(`${genreName} popular`);
+            const result = await fetch(`https://api.spotify.com/v1/search?q=${queryParam}&type=playlist&limit=${limit}&market=KR`, {
+                method: 'GET',
+                headers: {'Authorization': 'Bearer ' + token}
+            });
 
-        const data = await result.json();
-        return data.playlists.items;
-    }
+            if (!result.ok) {
+                throw new Error(`Search API request failed with status ${result.status}`);
+            }
+
+            const data = await result.json();
+            const playlists = data.playlists?.items || [];
+
+            // // owner.id가 'spotify'인 플레이리스트만 필터링
+            // const spotifyPlaylists = playlists.filter(playlist =>
+            //     playlist?.owner?.id === 'spotify'
+            // );
+
+            console.log('Found Spotify playlists:', playlists.length);
+            // return spotifyPlaylists.slice(0, 50); // 상위 50개만 반환
+            return playlists.slice(0, 50); // 상위 50개만 반환
+        } catch (error) {
+            console.error('Error in getPlaylistByGenre:', error);
+            return [];
+        }
+    };
+
 
     const _getTracks = async (token, tracksEndPoint) => {
         const limit = 20;
-        const result = await fetch(`${tracksEndPoint}?limit=${limit}`, {
-            method: 'GET',
-            headers: {'Authorization': 'Bearer ' + token}
-        });
+        try {
+            // tracksEndPoint에서 playlist ID 추출
+            const playlistId = tracksEndPoint.split('/').find(segment =>
+                segment.match(/^[0-9A-Za-z]{22}$/));
 
-        const data = await result.json();
-        return data.items.filter(item => item.track.preview_url !== null);
-    }
+            if (!playlistId) {
+                console.error('Invalid playlist ID from endpoint:', tracksEndPoint);
+                throw new Error('Invalid playlist ID');
+            }
+
+            const apiUrl = `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${limit}&market=KR`;
+            console.log('Requesting tracks from:', apiUrl);
+
+            const result = await fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!result.ok) {
+                console.log('API Response Status:', result.status);
+                throw new Error(`Failed to fetch tracks: ${result.status}`);
+            }
+
+            const data = await result.json();
+            console.log('Tracks data received:', data);
+
+            if (!data.items || !Array.isArray(data.items)) {
+                throw new Error('Invalid response structure');
+            }
+
+            // preview_url이 아닌 음악 자체를 가져와야 할 듯
+
+            return data.items;
+        } catch (error) {
+            console.error('Error in _getTracks:', error);
+            return [];
+        }
+    };
 
     return {
         getToken() {
@@ -54,8 +106,8 @@ const APIController = (function () {
         getGenres(token) {
             return _getGenres(token);
         },
-        getPlaylistByGenre(token, genreId) {
-            return _getPlaylistByGenre(token, genreId);
+        getPlaylistByGenre(token, genreName) {
+            return _getPlaylistByGenre(token, genreName);
         },
         getTracks(token, tracksEndPoint) {
             return _getTracks(token, tracksEndPoint);
@@ -63,7 +115,8 @@ const APIController = (function () {
     }
 })();
 
-const FormValidator = (function() {
+
+const FormValidator = (function () {
     // Validation rules
     const rules = {
         genre: {
@@ -109,7 +162,7 @@ const FormValidator = (function() {
         },
 
         validateField(field, value) {
-            switch(field) {
+            switch (field) {
                 case 'genre':
                     return validateGenre(value);
                 case 'playlist':
@@ -121,7 +174,7 @@ const FormValidator = (function() {
     };
 })();
 
-const UIController = (function() {
+const UIController = (function () {
     const DOMElements = {
         selectGenre: '#select_genre',
         selectPlaylist: '#select_playlist',
@@ -193,7 +246,6 @@ const UIController = (function() {
         },
 
 
-
         showFieldError(fieldName, message) {
             const field = document.querySelector(DOMElements[`select${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}`]);
             field.classList.add('error');
@@ -255,7 +307,7 @@ const UIController = (function() {
 })();
 
 
-const APPController = (function(UICtrl, APICtrl, FormValidator) {
+const APPController = (function (UICtrl, APICtrl, FormValidator) {
     const DOMInputs = UICtrl.inputField();
     const DOMElements = UICtrl.getDOMElements();
 
@@ -264,7 +316,7 @@ const APPController = (function(UICtrl, APICtrl, FormValidator) {
             const token = await APICtrl.getToken();
             UICtrl.storeToken(token);
             const genres = await APICtrl.getGenres(token);
-            genres.forEach(element => UICtrl.createGenre(element.name, element.id));
+            genres.forEach(element => UICtrl.createGenre(element.name, element.name));
         } catch (error) {
             console.error('Error loading genres:', error);
             UICtrl.showError('Failed to load genres. Please refresh the page.');
@@ -292,8 +344,8 @@ const APPController = (function(UICtrl, APICtrl, FormValidator) {
 
         try {
             const token = UICtrl.getStoredToken().token;
-            const genreId = DOMInputs.genre.options[DOMInputs.genre.selectedIndex].value;
-            const playlists = await APICtrl.getPlaylistByGenre(token, genreId);
+            const genreName = DOMInputs.genre.options[DOMInputs.genre.selectedIndex].value;
+            const playlists = await APICtrl.getPlaylistByGenre(token, genreName);
 
             if (!playlists || playlists.length === 0) {
                 UICtrl.showComingSoon();
@@ -301,7 +353,11 @@ const APPController = (function(UICtrl, APICtrl, FormValidator) {
             }
 
             UICtrl.hideComingSoon();
-            playlists.forEach(p => UICtrl.createPlaylist(p.name, p.tracks.href));
+            playlists.forEach(p => {
+                if (p && p.name && p.tracks && p.tracks.href) {
+                    UICtrl.createPlaylist(p.name, p.tracks.href);
+                }
+            });
         } catch (error) {
             console.error('Error fetching playlists:', error);
             UICtrl.showComingSoon();
