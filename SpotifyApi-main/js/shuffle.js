@@ -4,7 +4,7 @@ const APIController = (function () {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic ' + btoa('724a3cf2d2e44418acea58d9eea869af' + ':' + 'b330b0a626024564b802102b8f4b23f5')
+                'Authorization': 'Basic ' + btoa('724a3cf2d2e44418acea58d9eea869af' + ':' + 'dcae0a700dfc4477ab8896e84d75c1ee')
             },
             body: 'grant_type=client_credentials'
         });
