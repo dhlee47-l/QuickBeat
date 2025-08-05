@@ -16,5 +16,6 @@ B: Use Spotify Web Playback SDK
     3. Create Player instance with access token and connect
     4. Use Web API to control track & playlist using player(device ID)
     5. Control playback through Web Playback SDK or Web API
-    
- */
+
+*/
+
