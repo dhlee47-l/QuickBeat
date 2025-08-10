@@ -1,5 +1,11 @@
 # macOS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # VS Code
 .vscode/
@@ -13,17 +19,58 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Package managers (other than npm)
+yarn.lock
+pnpm-lock.yaml
+
+# React/Build outputs
+build/
+dist/
+*.tsbuildinfo
+.cache/
+.parcel-cache/
 
 # Environment variables
 .env
-.env.local
-.env.*.local
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Build outputs
-dist/
-build/
+# Testing
+coverage/
+*.lcov
+.nyc_output/
+.jest/
+
+# CI/CD
+.github/workflows/*.log
+.circleci/
+.travis.yml
+.gitlab-ci.yml
+
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
 # Temporary files
 *.tmp
 *.temp
+.cache
+*.swp
+*.swo
+
+# ESLint cache
+.eslintcache
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
