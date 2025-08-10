@@ -4,7 +4,7 @@ const APIController = (function () {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic ' + btoa('__SPOTIFY_CLIENT_ID__' + ':' + '__SPOTIFY_CLIENT_SECRET__')
+                'Authorization': 'Basic ' + btoa((window.Config?.SPOTIFY_CLIENT_ID || '__SPOTIFY_CLIENT_ID__') + ':' + (window.Config?.SPOTIFY_CLIENT_SECRET || '__SPOTIFY_CLIENT_SECRET__'))
             },
             body: 'grant_type=client_credentials'
         });
