@@ -17,7 +17,6 @@ document.getElementById('spotify-player-container').innerHTML = spotifyPlayer
 
 window.onSpotifyIframeApiReady = (IFrameAPI) => {
     const element = document.getElementById('spotify-embed'); // This gets replaced with the iframe
-    document.getElementById('spotify-embed-container').style.display = 'none';
     const options = {
         uri: `spotify:track:${trackId}`
         };
@@ -25,6 +24,8 @@ window.onSpotifyIframeApiReady = (IFrameAPI) => {
         document.getElementById('play').addEventListener('click', () => {EmbedController.togglePlay();});
     }
     IFrameAPI.createController(element, options, callback);
-    element.style.display = 'none'; // Hide iframe
+    document.getElementById('spotify-embed-container').style.transform = 'scale(0)';
+
+    //element.style.display = 'none'; // Hide iframe
 
 };
