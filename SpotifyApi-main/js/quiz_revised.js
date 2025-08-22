@@ -55,12 +55,16 @@ $('body').append(scoreModalHTML);
 
 let trackId = '3M4BUxp3L2RtlFXbysF7p9'
 
+let spotifyPlayer;
+
 window.onSpotifyIframeApiReady = (IFrameAPI) => {
     const element = document.getElementById('spotify-embed'); // This gets replaced with the iframe
     const options = {
         uri: `spotify:track:${trackId}`
         };
     const callback = (EmbedController) => {
+        spotifyPlayer = EmbedController;
+
         document.getElementById('modal-play-button').addEventListener('click', () => {EmbedController.togglePlay();});
     }
     IFrameAPI.createController(element, options, callback);
@@ -103,13 +107,24 @@ function openModal(index) {
 
     $('#modal-o-button').off('click').on('click', () => handleO(index));
     $('#modal-x-button').off('click').on('click', () => handleX(index));
+
+    if (spotifyPlayer) {
+        let trackId = track.id.split('/').pop().split('?')[0]; 
+        spotifyPlayer.loadUri(`spotify:track:${trackId}`);
+    } else {
+        console.warn("Spotify player not initialized yet.");
+    }
 }
 
 function closeModal() {
     $('#track-modal').removeClass('active');
-    if (currentAudio && !currentAudio.paused) {
-        currentAudio.pause();
+
+    if (spotifyPlayer) {
+        spotifyPlayer.togglePlay();
+    } else {
+        console.warn("Spotify player not initialized yet.");
     }
+
 }
 
 function handleO(index) {
