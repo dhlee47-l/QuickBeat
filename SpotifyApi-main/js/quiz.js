@@ -5,6 +5,7 @@ let totalQuestions = trackData ? trackData.length : 0;
 
 const modalHTML = `
     <div class="modal-overlay" id="track-modal">
+        <div id="spotify-embed-container"><div id="spotify-embed"></div></div>
         <div class="modal-content">
             <div class="modal-header">
                 <button class="modal-close" onclick="closeModal()">×</button>
@@ -52,6 +53,23 @@ const scoreModalHTML = `
 $('body').append(modalHTML);
 $('body').append(scoreModalHTML);
 
+let spotifyPlayer;
+
+window.onSpotifyIframeApiReady = (IFrameAPI) => {
+    const element = document.getElementById('spotify-embed'); // This gets replaced with the iframe
+    const options = {
+        uri: `spotify:track:${trackId}`
+        };
+    const callback = (EmbedController) => {
+        spotifyPlayer = EmbedController;
+
+        document.getElementById('modal-play-button').addEventListener('click', () => {EmbedController.togglePlay();});
+    }
+    IFrameAPI.createController(element, options, callback);
+    document.getElementById('spotify-embed-container').style.visibility = 'hidden';
+    document.getElementById('spotify-embed-container').style.position = 'absolute';
+};
+
 function createTrackElement(track, index) {
     return `
         <div class="track-item" onclick="openModal(${index})">
@@ -65,7 +83,6 @@ function createTrackElement(track, index) {
                 <div class="track-name">${track.name}</div>
                 <div class="track-artist">${track.artist}</div>
             </div>
-            <audio id="audio-${index}" class="audio-player" src="${track.previewUrl}"></audio>
         </div>
     `;
 }
@@ -85,16 +102,26 @@ function openModal(index) {
     $('.question-mark-overlay').removeClass('hidden');
     $('.modal-track-info').removeClass('visible');
 
-    $('#modal-play-button').html('<i class="fa-solid fa-play"></i>').off('click').on('click', () => togglePlay(`audio-${index}`));
     $('#modal-o-button').off('click').on('click', () => handleO(index));
     $('#modal-x-button').off('click').on('click', () => handleX(index));
+
+    if (spotifyPlayer) {
+        let trackId = track.id.split('/').pop().split('?')[0]; 
+        spotifyPlayer.loadUri(`spotify:track:${trackId}`);
+    } else {
+        console.warn("Spotify player not initialized yet.");
+    }
 }
 
 function closeModal() {
     $('#track-modal').removeClass('active');
-    if (currentAudio && !currentAudio.paused) {
-        currentAudio.pause();
+
+    if (spotifyPlayer) {
+        spotifyPlayer.togglePlay();
+    } else {
+        console.warn("Spotify player not initialized yet.");
     }
+
 }
 
 function handleO(index) {
@@ -123,23 +150,6 @@ function handleX(index) {
     closeModal();
 }
 
-function togglePlay(audioId) {
-    const $audio = $(`#${audioId}`)[0];
-    const $playButton = $('#modal-play-button');
-
-    if (currentAudio && currentAudio !== $audio && !currentAudio.paused) {
-        currentAudio.pause();
-    }
-
-    if ($audio.paused) {
-        $audio.play();
-        $playButton.html('<i class="fa-solid fa-pause"></i>');
-        currentAudio = $audio;
-    } else {
-        $audio.pause();
-        $playButton.html('<i class="fa-solid fa-play"></i>');
-    }
-}
 
 function startConfetti() {
     confetti({
@@ -183,6 +193,7 @@ $('#track-modal').on('click', function(e) {
 
 if (trackData && trackData.length > 0) {
     $trackListDiv.html(trackData.map((track, index) => createTrackElement(track, index)).join(''));
+
 } else {
     $trackListDiv.html('<p style="grid-column: 1/-1; text-align: center; padding: 32px; color: #666;">Coming Soon!</p>');
 }
