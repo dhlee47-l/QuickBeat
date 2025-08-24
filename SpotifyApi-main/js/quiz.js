@@ -57,6 +57,7 @@ let spotifyPlayer;
 
 window.onSpotifyIframeApiReady = (IFrameAPI) => {
     const element = document.getElementById('spotify-embed'); // This gets replaced with the iframe
+    let trackId = '4gBkCqlITvat2A3aYPtMqS'; // Default track ID
     const options = {
         uri: `spotify:track:${trackId}`
         };
@@ -117,7 +118,7 @@ function closeModal() {
     $('#track-modal').removeClass('active');
 
     if (spotifyPlayer) {
-        spotifyPlayer.togglePlay();
+        spotifyPlayer.pause();
     } else {
         console.warn("Spotify player not initialized yet.");
     }
