@@ -23,12 +23,10 @@ async function authenticate() {
     }
 
     const codeVerifier = generateRandomString(64);
-    window.localStorage.setItem('code_verifier', codeVerifier);
+    sessionStorage.setItem('code_verifier', codeVerifier);
 
     const hashed = await sha256(codeVerifier);
     const codeChallenge = base64encode(hashed);
-
-    console.log("Calling SpotifyAPI auth...");
 
     SpotifyAPI._getAuthorization(codeChallenge);
 }
