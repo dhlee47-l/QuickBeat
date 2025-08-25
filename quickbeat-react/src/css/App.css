@@ -1,0 +1,104 @@
+/* Import all CSS files from same directory */
+@import './main.css';
+@import './shuffle.css';
+@import './quiz.css';
+@import './qr.css';
+
+/* React App specific styles */
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* Ensure body maintains dark theme globally - override quiz.css white background */
+body {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Fix quiz page body background conflict */
+.quiz-page {
+  background-color: #000000 !important;
+}
+
+/* Fix quiz container centering */
+.quiz-page .container {
+  padding: 8rem 4rem 4rem !important;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Override QR page specific styles to match original */
+.qr-container {
+  max-width: 800px;
+  margin: 50px auto;
+  text-align: center;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-content h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  background: #4ECDC4;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.qr-content p {
+  font-size: 1rem;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.qr-code-container {
+  margin: 30px auto;
+  display: flex;
+  justify-content: center;
+}
+
+.qr-actions {
+  margin-top: 2rem;
+}
+
+.qr-actions .btn {
+  background: #4ECDC4;
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 250px;
+  margin: 0 auto;
+  text-decoration: none;
+}
+
+.qr-actions .btn:hover {
+  background: #45b7af;
+  transform: translateY(-2px);
+}
+
+.answer-track-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px;
+  padding: 0;
+  margin: 2rem 0;
+}
