@@ -7,6 +7,4 @@ const response = await SpotifyAPI._getToken(code);
 
 sessionStorage.setItem("spotify_access_token", response.access_token);
 
-SpotifyAPI._getUserPlaylist();
-
-// window.location.href = "/";
+window.location.href = "/playlistView";
