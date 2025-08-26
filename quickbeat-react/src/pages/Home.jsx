@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const Home = () => {
   return (
     <>
-      <header className="hero">
+    <div className="hero">
         <div className="hero-content">
           <div className="hero-text">
             <h1>Quick Beat</h1>
@@ -24,12 +24,13 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
       <section className="features">
         <div className="section-header">
           <h2>Why Quick Beat?</h2>
         </div>
+        
         <div className="features-grid">
           <div className="feature-card">
             <i className="fas fa-puzzle-piece"></i>
@@ -47,7 +48,7 @@ const Home = () => {
             <p>Quick Beat is planning to introduce a dedicated chat service</p>
           </div>
         </div>
-      </section>
+      </section>      
     </>
   );
 };

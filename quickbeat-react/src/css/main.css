@@ -18,15 +18,17 @@ body {
     line-height: 1.6;
     color: var(--text-color);
     background-color: var(--background-dark);
+    display: flex;
+    flex-direction: column;
 }
 
 .navbar {
     background-color: var(--background-dark);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    position: fixed;
     width: 100%;
     top: 0;
-    z-index: 1000;
+    position:sticky;
+    z-index: 1;
 }
 .nav-content {
     max-width: 1400px;
@@ -66,10 +68,8 @@ body {
 
 
 .hero {
-    padding: 12rem 2rem 8rem;
+    padding: 7rem 2rem 8rem;
     background-color: var(--background-dark);
-    position: relative;
-    overflow: hidden;
 }
 
 .hero-content {
@@ -160,7 +160,8 @@ body {
 .features-grid {
     max-width: 1400px;
     margin: 0 auto;
-    display: grid;
+    display: flex;
+    flex-direction: row;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 3rem;
 }
@@ -171,6 +172,7 @@ body {
     border-radius: 20px;
     text-align: center;
     transition: transform 0.3s ease;
+    flex : 1;
 }
 
 .feature-card:hover {
