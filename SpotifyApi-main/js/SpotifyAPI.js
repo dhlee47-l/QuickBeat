@@ -4,7 +4,7 @@ const redirectUri = 'http://localhost:5500/callback';
 
 
 export const _getAuthorization = async (codeChallenge) => {
-    const scope = 'user-read-private user-read-email';
+    const scope = 'user-read-private user-read-email playlist-read-private playlist-read-collaborative';
     const authUrl = new URL("https://accounts.spotify.com/authorize")
 
     const params =  {
@@ -44,3 +44,15 @@ export const _getToken = async (code) => {
   return await res.json();
 }
 
+export const _getUserPlaylist = async () => {
+  const token = sessionStorage.getItem('spotify_access_token');
+  console.log(token);
+  const result = await fetch("https://api.spotify.com/v1/me/playlists", {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }});
+
+  const data = await result.json();
+  return data;
+}
