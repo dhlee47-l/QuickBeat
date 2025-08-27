@@ -1,5 +1,5 @@
 
-const clientId = '724a3cf2d2e44418acea58d9eea869af'; // TODO : Replace with global const
+const clientId = window.Config?.SPOTIFY_CLIENT_ID || '__SPOTIFY_CLIENT_ID__';
 const redirectUri = 'http://localhost:5500/callback'; // TODO : Change if needed
 
 
@@ -46,7 +46,6 @@ export const _getToken = async (code) => {
 
 export const _getUserPlaylist = async () => {
   const token = sessionStorage.getItem('spotify_access_token');
-  console.log(token);
   const result = await fetch("https://api.spotify.com/v1/me/playlists", {
             method: 'GET',
             headers: {
