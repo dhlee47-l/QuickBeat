@@ -1,6 +1,6 @@
 import * as SpotifyAPI from './SpotifyAPI.js';
 
-async function authenticate() {
+export async function authenticate() {
 
     const generateRandomString = (length) => {
         const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -30,7 +30,3 @@ async function authenticate() {
 
     SpotifyAPI._getAuthorization(codeChallenge);
 }
-
-$('#login-btn').click(() => {
-    authenticate();
-});
