@@ -90,8 +90,6 @@ const APIController = (function () {
                 throw new Error('Invalid response structure');
             }
 
-            // preview_url이 아닌 음악 자체를 가져와야 할 듯
-
             return data.items;
         } catch (error) {
             console.error('Error in _getTracks:', error);
@@ -403,12 +401,12 @@ const APPController = (function (UICtrl, APICtrl, FormValidator) {
                 return;
             }
 
-            const trackData = tracks.map(e => ({
+            // TODO : Check if is_playable works as expected
+            const trackData = tracks.filter(e => e.track.name).map(e => ({
                 id: e.track.href,
                 name: e.track.name,
-                artist: e.track.artists[0].name,
-                albumImage: e.track.album.images[0].url,
-                previewUrl: e.track.preview_url
+                artist: e.track.artists[0]?.name,
+                albumImage: e.track.album.images[0]?.url,
             }));
 
             localStorage.setItem('trackData', JSON.stringify(trackData));
