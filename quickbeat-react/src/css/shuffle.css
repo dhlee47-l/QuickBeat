@@ -48,7 +48,7 @@ body {
 
 .form-grid {
     display: grid;
-    grid-template-columns: 2fr 2fr 1fr;
+    grid-template-columns: 300px 300px 1fr;
     gap: 1rem;
     align-items: center;
 }

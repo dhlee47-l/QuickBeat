@@ -7,7 +7,7 @@
 /* Removed conflicting body styles - handled in App.css */
 
 .container {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
 }
 
@@ -19,7 +19,7 @@ h2 {
 
 .track-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 24px;
     padding: 0;
 }
@@ -127,10 +127,12 @@ h2 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 0;
     transition: opacity 0.3s ease, transform 0.2s ease;
     z-index: 2;
     cursor: pointer;
+    padding: 0;
+    margin: 0;
 }
 
 .track-cover:hover {
@@ -190,6 +192,15 @@ h2 {
     font-weight: bold;
     color: white;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    padding: 8px 16px;
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    white-space: nowrap;
 }
 
 .modal-overlay {
@@ -280,6 +291,14 @@ h2 {
     color: #666;
 }
 
+.question-mark-overlay i {
+    font-size: 80px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 
 .question-mark-overlay.hidden {
     display: none;
@@ -307,11 +326,14 @@ h2 {
     font-weight: 600;
     margin-top: 8px;
     margin-bottom: 8px;
+    text-align: center;
+    color: #333;
 }
 
 .modal-track-artist {
     font-size: 18px;
     color: #666;
+    text-align: center;
 }
 
 .modal-controls {
@@ -356,9 +378,13 @@ h2 {
     border-radius: 50%;
     border: none;
     cursor: pointer;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
     transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 
 .modal-quiz-button:hover {

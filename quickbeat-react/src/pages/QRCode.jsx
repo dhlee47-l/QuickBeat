@@ -101,10 +101,10 @@ const QRCodePage = () => {
           <div id="qrcode" className="qr-code-container">
             {qrUrl && (
               <QRCode
-                size={256}
+                size={85}
                 style={{ height: "auto", maxWidth: "100%", width: "100%" }}
                 value={qrUrl}
-                viewBox={`0 0 256 256`}
+                viewBox={`0 0 85 85`}
               />
             )}
           </div>

@@ -145,12 +145,18 @@ const Quiz = () => {
     
     if (currentAudio && currentAudio !== audio && !currentAudio.paused) {
       currentAudio.pause();
+      setModalPlayingState(false);
     }
 
     if (audio.paused) {
       audio.play();
       setModalPlayingState(true);
       setCurrentAudio(audio);
+      
+      // Add event listener for when audio ends
+      audio.onended = () => {
+        setModalPlayingState(false);
+      };
     } else {
       audio.pause();
       setModalPlayingState(false);
