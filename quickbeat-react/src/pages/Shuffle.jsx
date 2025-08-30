@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import spotifyApi from '../services/spotifyApi';
 import useFormValidation from '../hooks/useFormValidation';
-// CSS will be loaded via public/css files
 
 const Shuffle = () => {
-  // React State Hooks - replacing vanilla JS variables
   const [token, setToken] = useState('');
   const [genres, setGenres] = useState([]);
   const [playlists, setPlaylists] = useState([]);
@@ -16,13 +14,10 @@ const Shuffle = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [globalError, setGlobalError] = useState('');
 
-  // Custom hook for form validation
   const { errors, validateForm, validateField, clearErrors, clearFieldError } = useFormValidation();
   
-  // React Router hook for navigation
   const navigate = useNavigate();
 
-  // useEffect Hook - equivalent to DOMContentLoaded and initialization
   useEffect(() => {
     const loadGenres = async () => {
       try {
@@ -37,9 +32,8 @@ const Shuffle = () => {
     };
 
     loadGenres();
-  }, []); // Empty dependency array = run once on mount
+  }, []); 
 
-  // Handle genre selection
   const handleGenreChange = async (e) => {
     const genreValue = e.target.value;
     setSelectedGenre(genreValue);
@@ -49,7 +43,6 @@ const Shuffle = () => {
     setIsSubmitDisabled(true);
     setShowComingSoon(false);
 
-    // Validate genre
     const error = validateField('genre', genreValue);
     if (error) {
       return;
@@ -75,7 +68,6 @@ const Shuffle = () => {
     }
   };
 
-  // Handle playlist selection
   const handlePlaylistChange = (e) => {
     const playlistValue = e.target.value;
     setSelectedPlaylist(playlistValue);
@@ -90,7 +82,6 @@ const Shuffle = () => {
     }
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     clearErrors();
@@ -111,7 +102,6 @@ const Shuffle = () => {
         return;
       }
 
-      // Transform track data - removed previewUrl as we now use Spotify embedded player
       const trackData = tracks.filter(e => e.track.name).map(e => ({
         id: e.track.href,
         name: e.track.name,
@@ -119,7 +109,6 @@ const Shuffle = () => {
         albumImage: e.track.album.images[0]?.url,
       }));
 
-      // Store in localStorage and navigate
       localStorage.setItem('trackData', JSON.stringify(trackData));
       navigate('/qr');
     } catch (error) {
@@ -130,7 +119,6 @@ const Shuffle = () => {
     }
   };
 
-  // Handle go back button
   const handleGoBack = () => {
     setShowComingSoon(false);
     setGlobalError('');
@@ -149,7 +137,6 @@ const Shuffle = () => {
         <p className="hero-description">장르와 키워드를 선택해주세요</p>
       </div>
 
-      {/* Main search section */}
       <div className="content-tile" id="search-section" style={{ display: showComingSoon ? 'none' : 'block' }}>
         <form className="search-form" onSubmit={handleSubmit}>
           <div className="form-grid">
@@ -217,7 +204,6 @@ const Shuffle = () => {
         </form>
       </div>
 
-      {/* Coming Soon section */}
       {showComingSoon && (
         <div className="coming-soon-section" id="coming-soon-section">
           <div className="coming-soon-content">

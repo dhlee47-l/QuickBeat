@@ -7,7 +7,6 @@ import Shuffle from './pages/Shuffle';
 import Quiz from './pages/Quiz';
 import QRCode from './pages/QRCode';
 
-// Import CSS files from css directory
 import './css/App.css';
 
 function App() {

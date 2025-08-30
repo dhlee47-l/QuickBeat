@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import QRCode from 'react-qr-code';
-// CSS will be loaded via public/css files
 
 const QRCodePage = () => {
   const [trackData, setTrackData] = useState([]);

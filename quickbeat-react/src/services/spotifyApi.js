@@ -1,5 +1,3 @@
-// Spotify API Service - Converting your APIController module pattern to modern JS
-
 class SpotifyApiService {
   
   async getToken() {
@@ -70,7 +68,6 @@ class SpotifyApiService {
   async getTracks(token, tracksEndPoint) {
     const limit = 20;
     try {
-      // Extract playlist ID from endpoint
       const playlistId = tracksEndPoint.split('/').find(segment =>
         segment.match(/^[0-9A-Za-z]{22}$/)
       );
@@ -111,6 +108,5 @@ class SpotifyApiService {
   }
 }
 
-// Export a single instance (singleton pattern)
 export default new SpotifyApiService();
 

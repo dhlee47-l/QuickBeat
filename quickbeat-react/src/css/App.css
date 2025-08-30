@@ -4,7 +4,6 @@
 @import './quiz.css';
 @import './qr.css';
 
-/* React App specific styles */
 .App {
   min-height: 100vh;
   display: flex;
@@ -17,25 +16,21 @@ main {
   flex-direction: column;
 }
 
-/* Ensure body maintains dark theme globally - override quiz.css white background */
 body {
   background-color: #000000 !important;
   color: #ffffff !important;
 }
 
-/* Fix quiz page body background conflict */
 .quiz-page {
   background-color: #000000 !important;
 }
 
-/* Fix quiz container centering */
 .quiz-page .container {
   padding: 8rem 4rem 4rem !important;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* Override QR page specific styles to match original */
 .qr-container {
   max-width: 800px;
   margin: 50px auto;
@@ -52,6 +47,7 @@ body {
   font-weight: 700;
   background: #4ECDC4;
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 0.5rem;
 }

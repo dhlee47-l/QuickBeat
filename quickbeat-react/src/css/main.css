@@ -88,6 +88,7 @@ body {
     font-weight: 900;
     background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 2rem;
 }
@@ -155,6 +156,7 @@ body {
     font-weight: 800;
     background: var(--accent-color);
     -webkit-background-clip: text;
+    background-clip: text;
 }
 
 .features-grid {

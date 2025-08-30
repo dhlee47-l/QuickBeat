@@ -6,10 +6,8 @@ const Navbar = () => {
   const [lastScroll, setLastScroll] = useState(0);
   const location = useLocation();
 
-  // React Hook equivalent of your original scroll handling
   useEffect(() => {
     const handleScroll = () => {
-      // Check if we're on mobile (equivalent to your mobileQuery.matches)
       const isMobile = window.innerWidth <= 768;
       
       if (!isMobile) return;
@@ -25,7 +23,6 @@ const Navbar = () => {
       setLastScroll(currentScroll);
     };
 
-    // Throttle function equivalent to your original throttle
     const throttle = (func, limit) => {
       let inThrottle;
       return function() {
@@ -40,11 +37,8 @@ const Navbar = () => {
     };
 
     const throttledHandleScroll = throttle(handleScroll, 100);
-
-    // Add event listeners
     window.addEventListener('scroll', throttledHandleScroll);
     
-    // Handle resize to show navbar on desktop
     const handleResize = () => {
       if (window.innerWidth > 768) {
         setIsHidden(false);
@@ -53,12 +47,11 @@ const Navbar = () => {
     
     window.addEventListener('resize', handleResize);
 
-    // Cleanup function (equivalent to removeEventListener)
     return () => {
       window.removeEventListener('scroll', throttledHandleScroll);
       window.removeEventListener('resize', handleResize);
     };
-  }, [lastScroll]); // Dependencies array - runs when lastScroll changes
+  }, [lastScroll]); 
 
   return (
     <nav className={`navbar ${isHidden ? 'hidden' : ''}`}>

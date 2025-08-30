@@ -1,11 +1,9 @@
 import { useState } from 'react';
 
-// Custom React Hook - Converting your FormValidator module pattern
 
 const useFormValidation = () => {
   const [errors, setErrors] = useState({});
 
-  // Validation rules
   const rules = {
     genre: {
       required: true,
@@ -62,7 +60,6 @@ const useFormValidation = () => {
         return null;
     }
 
-    // Update errors state
     setErrors(prev => ({
       ...prev,
       [field]: error

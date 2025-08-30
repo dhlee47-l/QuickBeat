@@ -4,7 +4,6 @@
     box-sizing: border-box;
 }
 
-/* Removed conflicting body styles - handled in App.css */
 
 .container {
     padding:12rem 8rem 8rem;
@@ -17,6 +16,7 @@ h2 {
     font-weight: 700;
     background: #4ECDC4;
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 0.5rem;
 

@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
-// CSS will be loaded via public/css files
 
 const Quiz = () => {
-  // React State - replacing global variables
   const [trackData, setTrackData] = useState([]);
   const [answeredQuestions, setAnsweredQuestions] = useState(new Set());
   const [totalQuestions, setTotalQuestions] = useState(0);
@@ -15,8 +13,6 @@ const Quiz = () => {
   
   // Spotify Embedded Player
   const [spotifyPlayer, setSpotifyPlayer] = useState(null);
-  const [isSpotifyApiReady, setIsSpotifyApiReady] = useState(false);
-  const [currentLoadedTrackId, setCurrentLoadedTrackId] = useState(null);
   const embedContainerRef = useRef(null);
 
   // Load track data on component mount
@@ -30,31 +26,8 @@ const Quiz = () => {
 
   // Initialize Spotify Embedded Player
   useEffect(() => {
-    // Set up the Spotify IFrame API callback
     window.onSpotifyIframeApiReady = (IFrameAPI) => {
-      console.log('Spotify IFrame API Ready!');
-      setIsSpotifyApiReady(true);
-      
-      // Wait a bit for DOM to be ready, then initialize
-      setTimeout(() => {
-        const element = document.getElementById('spotify-embed');
-        if (!element) {
-          console.warn('Spotify embed element not found, retrying...');
-          // Retry after a short delay
-          setTimeout(() => {
-            const retryElement = document.getElementById('spotify-embed');
-            if (retryElement) {
-              initializeSpotifyPlayer(IFrameAPI, retryElement);
-            }
-          }, 500);
-          return;
-        }
-        
-        initializeSpotifyPlayer(IFrameAPI, element);
-      }, 100);
-    };
-
-    const initializeSpotifyPlayer = (IFrameAPI, element) => {
+      const element = document.getElementById('spotify-embed');
       let trackId = '4gBkCqlITvat2A3aYPtMqS'; // Default track ID
       const options = {
         uri: `spotify:track:${trackId}`,
@@ -63,20 +36,16 @@ const Quiz = () => {
       };
       
       const callback = (EmbedController) => {
-        console.log('Spotify Embed Controller created:', EmbedController);
         setSpotifyPlayer(EmbedController);
-        setCurrentLoadedTrackId(trackId); // Set initial loaded track
         
-        // Add event listeners for play state changes
+        // Event listeners for play state changes
         EmbedController.addListener('playback_update', (e) => {
-          console.log('Playback update:', e);
           setModalPlayingState(!e.data.isPaused);
         });
       };
       
       IFrameAPI.createController(element, options, callback);
       
-      // Hide the embed container initially
       const container = document.getElementById('spotify-embed-container');
       if (container) {
         container.style.visibility = 'hidden';
@@ -87,7 +56,6 @@ const Quiz = () => {
     };
   }, []);
 
-  // Create track element (JSX version of your createTrackElement function)
   const TrackItem = ({ track, index }) => {
     const isAnswered = answeredQuestions.has(index);
     const hasXMark = !isAnswered && trackData[index]?.hasXMark;
@@ -113,7 +81,6 @@ const Quiz = () => {
     );
   };
 
-  // Modal component (JSX version of your modal HTML)
   const TrackModal = () => {
     if (!selectedTrack || !showModal) return null;
 
@@ -153,7 +120,6 @@ const Quiz = () => {
     );
   };
 
-  // Score Modal component
   const ScoreModal = () => {
     const score = calculateScore();
     
@@ -170,62 +136,37 @@ const Quiz = () => {
     );
   };
 
-  // Event handlers - converting your original functions to React
-  const openModal = async (index) => {
+  const openModal = (index) => {
     const track = trackData[index];
     setCurrentTrackIndex(index);
     setSelectedTrack(track);
     setShowModal(true);
     setModalPlayingState(false);
     
-    // Load track in Spotify player ONLY if it's a different track
     if (spotifyPlayer) {
-      try {
-        let trackId = track.id.split('/').pop().split('?')[0];
-        
-        // Only load if it's a different track than currently loaded
-        if (currentLoadedTrackId !== trackId) {
-          console.log('Loading new track:', trackId, 'from:', track.id);
-          await spotifyPlayer.loadUri(`spotify:track:${trackId}`);
-          setCurrentLoadedTrackId(trackId);
-          console.log('Track loaded successfully');
-        } else {
-          console.log('Track already loaded, skipping load:', trackId);
-          // Just ensure it's paused when opening modal
-          await spotifyPlayer.pause();
-        }
-      } catch (error) {
-        console.error('Error loading track:', error);
-      }
+      let trackId = track.id.split('/').pop().split('?')[0];
+      spotifyPlayer.loadUri(`spotify:track:${trackId}`);
     } else {
       console.warn("Spotify player not initialized yet.");
     }
   };
 
-  const closeModal = async () => {
+  const closeModal = () => {
     setShowModal(false);
     
-    // Pause Spotify player
     if (spotifyPlayer) {
-      try {
-        await spotifyPlayer.pause();
-        setModalPlayingState(false);
-      } catch (error) {
-        console.error('Error pausing Spotify player:', error);
-      }
+      spotifyPlayer.pause();
     } else {
       console.warn("Spotify player not initialized yet.");
     }
   };
 
   const handleO = (index) => {
-    // Mark as answered
     setAnsweredQuestions(prev => new Set([...prev, index]));
     closeModal();
   };
 
   const handleX = (index) => {
-    // Mark track with X but don't close modal
     setTrackData(prev => 
       prev.map((track, i) => 
         i === index ? { ...track, hasXMark: true } : track
@@ -234,15 +175,9 @@ const Quiz = () => {
     closeModal();
   };
 
-  const toggleSpotifyPlay = async () => {
+  const toggleSpotifyPlay = () => {
     if (spotifyPlayer) {
-      try {
-        console.log('Toggling play, current state:', modalPlayingState);
-        await spotifyPlayer.togglePlay();
-        // Note: State will be updated by the playback_update listener
-      } catch (error) {
-        console.error('Error toggling Spotify play:', error);
-      }
+      spotifyPlayer.togglePlay();
     } else {
       console.warn("Spotify player not initialized yet.");
     }
@@ -273,7 +208,6 @@ const Quiz = () => {
     setShowScoreModal(false);
   };
 
-  // Handle modal overlay clicks
   const handleModalOverlayClick = (e) => {
     if (e.target.classList.contains('modal-overlay')) {
       closeModal();
@@ -288,7 +222,6 @@ const Quiz = () => {
 
   return (
     <div className="quiz-page">
-      {/* Hidden Spotify Embed Container - Always in DOM for API initialization */}
       <div id="spotify-embed-container" style={{ 
         visibility: 'hidden', 
         position: 'absolute', 
@@ -312,14 +245,12 @@ const Quiz = () => {
         </div>
       </div>
 
-      {/* Score Button */}
       <div className="score-button-container">
         <button className="check-score-button" onClick={showScore}>
           점수를 확인하세요!
         </button>
       </div>
 
-      {/* Modals */}
       <TrackModal />
       <ScoreModal />
     </div>
