@@ -111,13 +111,12 @@ const Shuffle = () => {
         return;
       }
 
-      // Transform track data
-      const trackData = tracks.map(e => ({
+      // Transform track data - removed previewUrl as we now use Spotify embedded player
+      const trackData = tracks.filter(e => e.track.name).map(e => ({
         id: e.track.href,
         name: e.track.name,
-        artist: e.track.artists[0].name,
-        albumImage: e.track.album.images[0].url,
-        previewUrl: e.track.preview_url
+        artist: e.track.artists[0]?.name,
+        albumImage: e.track.album.images[0]?.url,
       }));
 
       // Store in localStorage and navigate
