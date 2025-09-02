@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import spotifyApi from '../services/spotifyApi';
+import * as SpotifyAPI from '../services/spotifyApi';
 import useFormValidation from '../hooks/useFormValidation';
 
 const Shuffle = () => {
@@ -21,9 +21,9 @@ const Shuffle = () => {
   useEffect(() => {
     const loadGenres = async () => {
       try {
-        const accessToken = await spotifyApi.getToken();
+        const accessToken = await SpotifyAPI.getToken();
         setToken(accessToken);
-        const genresList = await spotifyApi.getGenres(accessToken);
+        const genresList = await SpotifyAPI.getGenres(accessToken);
         setGenres(genresList);
       } catch (error) {
         console.error('Error loading genres:', error);
@@ -50,7 +50,7 @@ const Shuffle = () => {
 
     try {
       setIsLoading(true);
-      const playlistsList = await spotifyApi.getPlaylistByGenre(token, genreValue);
+      const playlistsList = await SpotifyAPI.getPlaylistByGenre(token, genreValue);
 
       if (!playlistsList || playlistsList.length === 0) {
         setShowComingSoon(true);
@@ -95,7 +95,7 @@ const Shuffle = () => {
 
     try {
       setIsLoading(true);
-      const tracks = await spotifyApi.getTracks(token, selectedPlaylist);
+      const tracks = await SpotifyAPI.getTracks(token, selectedPlaylist);
 
       if (!tracks || tracks.length === 0) {
         setGlobalError('No tracks found in this playlist');
