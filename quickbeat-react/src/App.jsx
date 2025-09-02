@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Shuffle from './pages/Shuffle';
 import Quiz from './pages/Quiz';
 import QRCode from './pages/QRCode';
+import Callback from './pages/Callback';
 
 import './css/App.css';
 
@@ -20,9 +21,11 @@ function App() {
             <Route path="/shuffle" element={<Shuffle />} />
             <Route path="/quiz" element={<Quiz />} />
             <Route path="/qr" element={<QRCode />} />
+            <Route path="/callback" element={<Callback />} />
+
           </Routes>
         </main>
-        <Footer />
+        {/*<Footer />*/}
       </div>
     </Router>
   );

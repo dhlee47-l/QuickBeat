@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as SpotifyAPI from '../services/spotifyApi';
+import { authenticate } from '../services/spotifyAuth';
 import useFormValidation from '../hooks/useFormValidation';
 
 const Shuffle = () => {
@@ -133,7 +134,7 @@ const Shuffle = () => {
     <>
       <div className="shuffle-text">
         <h1>Quick Beat</h1>
-        <h2>Choose the Genre and Keyword to play!</h2>
+        <h2>Choose a Genre and Keyword to play!</h2>
         <p className="hero-description">장르와 키워드를 선택해주세요</p>
       </div>
 
@@ -203,6 +204,18 @@ const Shuffle = () => {
           </div>
         </form>
       </div>
+
+      <div id="spotify-auth-container" style={{ display:"flex", justifyContent:"center", marginTop:"20px", marginBottom:"40px", visibility: showComingSoon ? 'hidden' : 'visible' }}>
+      <button 
+        type="button" 
+        id="btn_spotifyAuth" 
+        className="submit-button"
+        disabled={isLoading}
+        onClick={() => authenticate()}
+        style={{ opacity: isSubmitDisabled || isLoading ? '0.5' : '1', width: "20vw",}}
+      >Login to Spotify</button>
+      </div>
+   
 
       {showComingSoon && (
         <div className="coming-soon-section" id="coming-soon-section">
