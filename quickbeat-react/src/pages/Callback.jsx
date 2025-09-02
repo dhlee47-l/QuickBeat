@@ -5,9 +5,9 @@ function Callback() {
   useEffect(() => {
     (async () => {
       await getToken();
-      window.location.href = "/shuffle"; // redirect after token
+      window.location.href = "/shuffle";
     })();
-  }, []); // empty dependency → runs only once
+  }, []);
 
   return <div>Redirecting…</div>;
 }
