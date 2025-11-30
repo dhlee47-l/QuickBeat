@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as SpotifyAPI from '../services/spotifyApi';
 import { authenticate } from '../services/spotifyAuth';
+import Playlist from '../components/Playlist';
 import useFormValidation from '../hooks/useFormValidation';
 
 const Shuffle = () => {
@@ -38,16 +39,14 @@ const Shuffle = () => {
   const handleGenreChange = async (e) => {
     const genreValue = e.target.value;
     setSelectedGenre(genreValue);
-    setSelectedPlaylist(''); // Reset playlist
-    setPlaylists([]); // Clear playlists
+    setSelectedPlaylist(''); 
+    setPlaylists([]); 
     clearErrors();
     setIsSubmitDisabled(true);
     setShowComingSoon(false);
 
     const error = validateField('genre', genreValue);
-    if (error) {
-      return;
-    }
+    if (error) return;
 
     try {
       setIsLoading(true);
@@ -69,12 +68,11 @@ const Shuffle = () => {
     }
   };
 
-  const handlePlaylistChange = (e) => {
-    const playlistValue = e.target.value;
-    setSelectedPlaylist(playlistValue);
+  const handlePlaylistSelect = (playlistHref) => {
+    setSelectedPlaylist(playlistHref);
     clearFieldError('playlist');
     
-    const error = validateField('playlist', playlistValue);
+    const error = validateField('playlist', playlistHref);
     
     if (error) {
       setIsSubmitDisabled(true);
@@ -134,14 +132,13 @@ const Shuffle = () => {
     <>
       <div className="shuffle-text">
         <h1>Quick Beat</h1>
-        <h2>Choose a Genre and Keyword to play!</h2>
-        <p className="hero-description">장르와 키워드를 선택해주세요</p>
+        <h2>Choose a Genre and a Playlist</h2>
+        <p className="hero-description">장르와 플레이리스트를 선택해주세요</p>
       </div>
 
       <div className="content-tile" id="search-section" style={{ display: showComingSoon ? 'none' : 'block' }}>
         <form className="search-form" onSubmit={handleSubmit}>
-          <div className="form-grid">
-            <div className="form-group">
+           <div className="form-group" style={{marginBottom: '2rem'}}>
               <select 
                 id="select_genre" 
                 className={`form-select ${errors.genre ? 'error' : ''}`}
@@ -149,7 +146,7 @@ const Shuffle = () => {
                 onChange={handleGenreChange}
                 required
               >
-                <option value="">Genre</option>
+                <option value="">Select a Genre</option>
                 {genres.map(genre => (
                   <option key={genre.id} value={genre.name}>
                     {genre.name}
@@ -162,61 +159,47 @@ const Shuffle = () => {
                 </div>
               )}
             </div>
+            {playlists.length > 0 && 
+            <Playlist 
+              playlists={playlists}
+              selectedPlaylist={selectedPlaylist}
+              handlePlaylistSelect={handlePlaylistSelect}
+              errors={errors}
+            />}
 
-            <div className="form-group">
-              <select 
-                id="select_playlist" 
-                className={`form-select ${errors.playlist ? 'error' : ''}`}
-                value={selectedPlaylist}
-                onChange={handlePlaylistChange}
-                required
+            {/* Submit Button */}
+            <div className="form-actions" style={{marginTop: '2rem'}}>
+              <button 
+                type="submit" 
+                id="btn_submit" 
+                className="submit-button"
+                disabled={isSubmitDisabled || isLoading}
+                style={{ opacity: isSubmitDisabled || isLoading ? '0.5' : '1' }}
               >
-                <option value="">Keyword</option>
-                {playlists.map(playlist => (
-                  <option key={playlist.id} value={playlist.tracks.href}>
-                    {playlist.name}
-                  </option>
-                ))}
-              </select>
-              {errors.playlist && (
-                <div className="field-error" style={{ display: 'block' }}>
-                  {errors.playlist}
-                </div>
-              )}
+                <span>{isLoading ? 'Loading...' : 'Start Playing'}</span>
+                <i className="fas fa-arrow-right"></i>
+              </button>
             </div>
-
-            <button 
-              type="submit" 
-              id="btn_submit" 
-              className="submit-button"
-              disabled={isSubmitDisabled || isLoading}
-              style={{ opacity: isSubmitDisabled || isLoading ? '0.5' : '1' }}
-            >
-              <span>{isLoading ? 'Loading...' : 'Search'}</span>
-              <i className="fas fa-arrow-right"></i>
-            </button>
 
             {globalError && (
               <div id="error-message" className="error-message" style={{ display: 'block' }}>
                 {globalError}
               </div>
             )}
-          </div>
         </form>
       </div>
 
       <div id="spotify-auth-container" style={{ display:"flex", justifyContent:"center", marginTop:"20px", marginBottom:"40px", visibility: showComingSoon ? 'hidden' : 'visible' }}>
-      <button 
-        type="button" 
-        id="btn_spotifyAuth" 
-        className="submit-button"
-        disabled={isLoading}
-        onClick={() => authenticate()}
-        style={{ opacity: isSubmitDisabled || isLoading ? '0.5' : '1', width: "20vw",}}
-      >Login to Spotify</button>
+        <button 
+          type="button" 
+          id="btn_spotifyAuth" 
+          className="submit-button"
+          disabled={isLoading}
+          onClick={() => authenticate()}
+          style={{ opacity: isSubmitDisabled || isLoading ? '0.5' : '1', width: "20vw",}}
+        >Login to Spotify</button>
       </div>
    
-
       {showComingSoon && (
         <div className="coming-soon-section" id="coming-soon-section">
           <div className="coming-soon-content">
@@ -234,11 +217,6 @@ const Shuffle = () => {
           </div>
         </div>
       )}
-
-      <div className="results-container">
-        <div className="song-list"></div>
-        <div id="song-detail"></div>
-      </div>
     </>
   );
 };

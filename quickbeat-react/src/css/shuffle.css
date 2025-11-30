@@ -30,6 +30,7 @@ body {
 .hero-description {
     color: #86868b;
     font-size: 1.1rem;
+    margin-bottom: 0;
 }
 
 .content-tile {
@@ -44,6 +45,8 @@ body {
     backdrop-filter: blur(20px);
     padding: 2rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    min-width: 50vw;
+
 }
 
 .form-grid {
@@ -266,3 +269,170 @@ select.error:focus {
     }
 }
 
+/* For playlist cards */
+/* --- Playlist Card Styling --- */
+.playlist-card {
+  background: rgba(255, 255, 255, 0.05); /* Glassmorphism effect */
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+.playlist-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Selected State */
+.playlist-card.selected {
+  border-color: #1DB954;
+  background: rgba(29, 185, 84, 0.1);
+}
+
+/* --- Card Image --- */
+.card-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  overflow: hidden;
+}
+
+.card-image-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+/* Hover Effect on Image */
+.playlist-card:hover .card-image-wrapper img {
+  transform: scale(1.05);
+}
+
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.playlist-card:hover .card-overlay,
+.playlist-card.selected .card-overlay {
+  opacity: 1;
+}
+
+.card-overlay i {
+  font-size: 3rem;
+  color: #fff;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.playlist-card.selected .card-overlay i {
+  color: #1DB954;
+}
+
+/* --- Card Content --- */
+.card-content {
+  padding: 15px;
+  text-align: left;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.playlist-title {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 5px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.playlist-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #b3b3b3;
+  margin-bottom: 8px;
+}
+
+.playlist-desc {
+  font-size: 0.75rem;
+  color: #a0a0a0;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+/* --- Playlist Grid Layout --- */
+.playlist-selection-container {
+  width: 100%;
+  margin-top: 20px;
+  /* Optional: Add a subtle border or background to frame the area */
+  box-sizing: border-box;
+}
+
+.section-title {
+  color: #fff;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+  text-align: left;
+  /* Keep the title sticky so it doesn't scroll away */
+  position: sticky; 
+  top: 0;
+}
+
+.playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Slightly smaller cards */
+  gap: 15px;
+  width: 100%;
+  
+  /* --- SCROLL LOGIC --- */
+  max-height: 60vh; /* Limits height to 60% of the screen height */
+  overflow-y: auto; /* Adds scrollbar when content exceeds height */
+  padding-right: 10px; /* Prevents scrollbar from overlapping content */
+  padding-bottom: 5px;
+}
+
+/* --- Custom Scrollbar Styling (Modern & Dark) --- */
+/* Works on Chrome, Edge, and Safari */
+.playlist-grid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.playlist-grid::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05); 
+  border-radius: 4px;
+}
+
+.playlist-grid::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3); 
+  border-radius: 4px;
+}
+
+.playlist-grid::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5); 
+}
